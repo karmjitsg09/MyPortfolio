@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
 import ParticleBackground from './ParticleBackground';
-import { projects } from './Projects';
+import { featuredProjects, projects } from './Projects';
 
 const roles = [
     'Full-Stack Developer',
@@ -280,7 +280,7 @@ export default function Hero() {
                         {/* Stats */}
                         <div className="flex flex-wrap gap-6 sm:gap-10 pt-6 border-t border-white/10">
                             {[
-                                { value: projects.length, label: 'Full-Stack & AI Projects' },
+                                { value: featuredProjects.length, label: 'Featured Full-Stack & AI Projects' },
                                 { value: 'Deployed', label: 'Real-World Apps' },
                                 { value: 'Hackathons', label: 'Replit × Polaris' },
                                 { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },

@@ -1,9 +1,24 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt, FaBolt, FaShoppingBag, FaRobot, FaUsers, FaGraduationCap, FaRecycle } from 'react-icons/fa';
+import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-    SiReact, SiTypescript, SiVite, SiJavascript,
-    SiHtml5, SiCss, SiPython, SiFastapi,
+    FaGithub,
+    FaExternalLinkAlt,
+    FaBolt,
+    FaShoppingBag,
+    FaUsers,
+    FaGraduationCap,
+    FaRecycle,
+    FaChartBar,
+} from 'react-icons/fa';
+import {
+    SiReact,
+    SiTypescript,
+    SiVite,
+    SiJavascript,
+    SiHtml5,
+    SiCss,
+    SiPython,
+    SiFastapi,
     SiGooglegemini,
     SiOpencv,
     SiFlask,
@@ -14,15 +29,36 @@ import {
     SiFirebase,
     SiNextdotjs,
     SiTailwindcss,
+    SiPandas,
+    SiNumpy,
+    SiJupyter,
+    SiScikitlearn,
+    SiThreedotjs,
 } from 'react-icons/si';
-import { MdOutlineCamera, MdOutlineScience, MdAccountBalanceWallet, MdLocationCity } from 'react-icons/md';
+import {
+    MdOutlineCamera,
+    MdOutlineScience,
+    MdAccountBalanceWallet,
+    MdLocationCity,
+    MdOutlineAnalytics,
+    MdOutlineSportsEsports,
+} from 'react-icons/md';
 import { BsCalendarCheck, BsCheckCircleFill, BsShieldCheck } from 'react-icons/bs';
-import { LuDatabase, LuCpu, LuLayers, LuSparkles } from 'react-icons/lu';
+import {
+    LuLayers,
+    LuSparkles,
+    LuBrain,
+    LuEye,
+    LuActivity,
+    LuTrendingUp,
+    LuSearch,
+    LuFilter,
+} from 'react-icons/lu';
 
 /* ─────────────────────────────────────────
-   PROJECT DATA (All 9 Projects)
+   1. FEATURED PROJECTS (9 Primary Apps)
 ───────────────────────────────────────── */
-export const projects = [
+export const featuredProjects = [
     {
         id: 'lab-allotment',
         orderNumber: '01',
@@ -373,20 +409,274 @@ export const projects = [
     },
 ];
 
+/* Canonical projects alias */
+export const projects = featuredProjects;
+
+/* ─────────────────────────────────────────
+   2. ADDITIONAL PROJECTS & EXPERIMENTS
+───────────────────────────────────────── */
+export const additionalProjects = [
+    {
+        id: 'posestrike',
+        title: 'PoseStrike / Fighting Game Experiments',
+        category: 'AI / Computer Vision / Game',
+        filterCategory: 'Games & Interactive',
+        description:
+            'Motion-controlled 2D fighting game experiment using camera-based body tracking and interactive frontend animation.',
+        icon: MdOutlineSportsEsports,
+        iconColor: '#00d4ff',
+        badgeColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'OpenCV', icon: SiOpencv, color: '#00ffea' },
+            { label: 'JavaScript', icon: SiJavascript, color: '#facc15' },
+            { label: 'HTML5 Canvas', icon: SiHtml5, color: '#f97316' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'hand-tracker',
+        title: 'Motion-Controlled Hand Tracker',
+        category: 'Computer Vision',
+        filterCategory: 'Computer Vision',
+        description:
+            'Webcam-based computer vision system for detecting, landmarking, and tracking hand movement in real-time.',
+        icon: MdOutlineCamera,
+        iconColor: '#00ffea',
+        badgeColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'OpenCV', icon: SiOpencv, color: '#00ffea' },
+            { label: 'MediaPipe', icon: LuEye, color: '#38bdf8' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'gesture-drawing',
+        title: 'Gesture-Based Drawing System',
+        category: 'Computer Vision / Interactive UI',
+        filterCategory: 'Computer Vision',
+        description:
+            'Interactive virtual drawing experiment controlled through real-time hand gestures and camera feed.',
+        icon: LuSparkles,
+        iconColor: '#b400ff',
+        badgeColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'OpenCV', icon: SiOpencv, color: '#00ffea' },
+            { label: 'NumPy', icon: SiNumpy, color: '#4d77cf' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'object-detection',
+        title: 'AI Object Detection System',
+        category: 'AI / Computer Vision',
+        filterCategory: 'Computer Vision',
+        description:
+            'Computer vision pipeline for detecting and classifying objects from visual input streams.',
+        icon: LuEye,
+        iconColor: '#00d4ff',
+        badgeColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'OpenCV', icon: SiOpencv, color: '#00ffea' },
+            { label: 'TensorFlow', icon: SiTensorflow, color: '#ff6f00' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'emergex-healthcare',
+        title: 'EmergeX Healthcare / Triage Project',
+        category: 'AI / Healthcare',
+        filterCategory: 'AI / ML',
+        description:
+            'Healthcare-focused AI project exploring technology-assisted triage and emergency assessment.',
+        icon: LuActivity,
+        iconColor: '#34d399',
+        badgeColor: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
+        technologies: [
+            { label: 'React', icon: SiReact, color: '#61dafb' },
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'FastAPI', icon: SiFastapi, color: '#009688' },
+            { label: 'Gemini API', icon: SiGooglegemini, color: '#4796e3' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'early-warning-system',
+        title: 'AI-Based Early Warning System for At-Risk Students',
+        category: 'AI / Machine Learning / Research',
+        filterCategory: 'Research',
+        description:
+            'Machine learning research project exploring early identification of students who may need additional academic support based on academic and attendance indicators.',
+        icon: LuBrain,
+        iconColor: '#a78bfa',
+        badgeColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Scikit-Learn', icon: SiScikitlearn, color: '#f89939' },
+            { label: 'Pandas', icon: SiPandas, color: '#150458' },
+            { label: 'NumPy', icon: SiNumpy, color: '#4d77cf' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'ai-automation',
+        title: 'AI Automation Experiments',
+        category: 'AI / Automation',
+        filterCategory: 'AI / ML',
+        description:
+            'Experimental AI and automation workflows exploring practical developer and productivity use cases.',
+        icon: FaBolt,
+        iconColor: '#facc15',
+        badgeColor: 'text-amber-400 border-amber-500/40 bg-amber-500/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Node.js', icon: SiNodedotjs, color: '#22c55e' },
+            { label: 'Gemini API', icon: SiGooglegemini, color: '#4796e3' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'interactive-portfolio',
+        title: 'Interactive 3D Developer Portfolio',
+        category: 'Web / 3D Experience',
+        filterCategory: 'Full-Stack',
+        description:
+            'My interactive developer portfolio exploring 3D visuals, animation, and modern frontend development.',
+        icon: LuSparkles,
+        iconColor: '#00d4ff',
+        badgeColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
+        technologies: [
+            { label: 'React', icon: SiReact, color: '#61dafb' },
+            { label: 'Three.js', icon: SiThreedotjs, color: '#ffffff' },
+            { label: 'Tailwind CSS', icon: SiTailwindcss, color: '#38bdf8' },
+            { label: 'Framer Motion', icon: SiVite, color: '#a78bfa' },
+        ],
+        github: 'https://github.com/karmjitsg09/MyPortfolio',
+        live: 'https://karmjit.me/',
+    },
+    {
+        id: 'asp-fashions',
+        title: 'ASP Fashions — Earlier E-Commerce Version',
+        category: 'Full-Stack / E-Commerce',
+        filterCategory: 'Full-Stack',
+        description:
+            'Earlier boutique e-commerce prototype that evolved into the Anushka Knits World catalog storefront.',
+        icon: FaShoppingBag,
+        iconColor: '#f472b6',
+        badgeColor: 'text-pink-400 border-pink-500/40 bg-pink-500/10',
+        technologies: [
+            { label: 'HTML5', icon: SiHtml5, color: '#f97316' },
+            { label: 'CSS3', icon: SiCss, color: '#38bdf8' },
+            { label: 'JavaScript', icon: SiJavascript, color: '#facc15' },
+        ],
+        github: 'https://github.com/karmjitsg09/ANUSHKAA-KNITS-WORLD',
+        live: null,
+    },
+    {
+        id: 'job-analytics',
+        title: 'Job Market Analytics',
+        category: 'Data & Analytics',
+        filterCategory: 'Data & Analytics',
+        description:
+            'Data analysis project exploring job market datasets, skill demand patterns, and compensation trends.',
+        icon: MdOutlineAnalytics,
+        iconColor: '#38bdf8',
+        badgeColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Pandas', icon: SiPandas, color: '#150458' },
+            { label: 'NumPy', icon: SiNumpy, color: '#4d77cf' },
+            { label: 'Jupyter', icon: SiJupyter, color: '#f37626' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'snapdeal-analytics',
+        title: 'Snapdeal E-Commerce Analytics',
+        category: 'Data & Analytics',
+        filterCategory: 'Data & Analytics',
+        description:
+            'Exploratory data analysis investigating e-commerce product catalog pricing, ratings, and category distributions.',
+        icon: LuTrendingUp,
+        iconColor: '#00ffea',
+        badgeColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Pandas', icon: SiPandas, color: '#150458' },
+            { label: 'Jupyter', icon: SiJupyter, color: '#f37626' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'playstore-analytics',
+        title: 'Google Play Store Analytics',
+        category: 'Data & Analytics',
+        filterCategory: 'Data & Analytics',
+        description:
+            'Data analysis examining mobile application listings, category market share, review sentiments, and rating distributions.',
+        icon: FaChartBar,
+        iconColor: '#34d399',
+        badgeColor: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Pandas', icon: SiPandas, color: '#150458' },
+            { label: 'NumPy', icon: SiNumpy, color: '#4d77cf' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+    {
+        id: 'crypto-analytics',
+        title: 'Crypto Market Analytics',
+        category: 'Data & Analytics',
+        filterCategory: 'Data & Analytics',
+        description:
+            'Time-series data analysis and visualization exploring historical cryptocurrency market volatility and price volume patterns.',
+        icon: LuActivity,
+        iconColor: '#facc15',
+        badgeColor: 'text-amber-400 border-amber-500/40 bg-amber-500/10',
+        technologies: [
+            { label: 'Python', icon: SiPython, color: '#38bdf8' },
+            { label: 'Pandas', icon: SiPandas, color: '#150458' },
+            { label: 'Jupyter', icon: SiJupyter, color: '#f37626' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: null,
+    },
+];
+
+export const allProjects = [...featuredProjects, ...additionalProjects];
+
 /* ─────────────────────────────────────────
     TECH BADGE
 ───────────────────────────────────────── */
-function TechBadge({ tech }) {
+function TechBadge({ tech, compact = false }) {
     return (
-        <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 bg-white/5 border border-white/10 hover:border-white/20 transition-colors">
-            <tech.icon style={{ color: tech.color }} className="text-sm flex-shrink-0" />
+        <span
+            className={`flex items-center gap-1.5 rounded-xl font-medium text-slate-300 bg-white/5 border border-white/10 hover:border-white/20 transition-colors ${
+                compact ? 'px-2.5 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
+            }`}
+        >
+            <tech.icon style={{ color: tech.color }} className={compact ? 'text-xs flex-shrink-0' : 'text-sm flex-shrink-0'} />
             {tech.label}
         </span>
     );
 }
 
 /* ─────────────────────────────────────────
-   REUSABLE LARGE SPLIT PROJECT CARD
+   REUSABLE LARGE SPLIT PROJECT CARD (Case Studies)
 ───────────────────────────────────────── */
 function ProjectShowcaseCard({ project, index }) {
     const isEven = index % 2 === 0;
@@ -561,17 +851,135 @@ function ProjectShowcaseCard({ project, index }) {
 }
 
 /* ─────────────────────────────────────────
+   COMPACT ADDITIONAL PROJECT CARD
+───────────────────────────────────────── */
+function AdditionalProjectCard({ project }) {
+    const IconComponent = project.icon;
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.4 }}
+            whileHover={{ y: -4 }}
+            className="group relative glass rounded-2xl p-6 sm:p-7 border border-white/10 hover:border-neon-cyan/40 transition-all duration-300 flex flex-col justify-between overflow-hidden"
+            style={{
+                boxShadow: '0 4px 20px -5px rgba(0,0,0,0.5)',
+            }}
+        >
+            {/* Top Accent Line on Hover */}
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-neon-cyan via-neon-blue to-neon-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            <div>
+                {/* Header: Category Badge */}
+                <div className="flex items-center justify-between gap-2 mb-3.5">
+                    <span
+                        className={`text-[10px] sm:text-xs font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${project.badgeColor}`}
+                    >
+                        {project.category}
+                    </span>
+                </div>
+
+                {/* Project Icon + Title */}
+                <div className="flex items-start gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:border-neon-cyan/40 transition-colors">
+                        <IconComponent style={{ color: project.iconColor }} className="text-xl" />
+                    </div>
+                    <h4 className="text-lg font-bold text-white group-hover:text-neon-cyan transition-colors leading-snug">
+                        {project.title}
+                    </h4>
+                </div>
+
+                {/* Description */}
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-5">
+                    {project.description}
+                </p>
+            </div>
+
+            <div>
+                {/* Technologies */}
+                <div className="flex flex-wrap gap-1.5 mb-5 pt-3 border-t border-white/5">
+                    {project.technologies.map((t) => (
+                        <TechBadge key={t.label} tech={t} compact />
+                    ))}
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2.5 pt-1">
+                    <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:border-white/30 hover:bg-white/10 text-xs font-semibold transition-all"
+                    >
+                        <FaGithub className="text-sm" /> Code
+                    </a>
+
+                    {project.live ? (
+                        <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold text-xs hover:brightness-110 shadow-sm transition-all"
+                        >
+                            <FaExternalLinkAlt className="text-[10px]" /> Live Demo
+                        </a>
+                    ) : null}
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+/* ─────────────────────────────────────────
    MAIN PROJECTS SECTION
 ───────────────────────────────────────── */
+const FILTER_CATEGORIES = [
+    'All',
+    'Full-Stack',
+    'AI / ML',
+    'Computer Vision',
+    'Data & Analytics',
+    'Games & Interactive',
+    'Research',
+];
+
 export default function Projects() {
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const filteredAdditionalProjects = useMemo(() => {
+        return additionalProjects.filter((project) => {
+            const matchesCategory =
+                selectedCategory === 'All' ||
+                project.filterCategory === selectedCategory ||
+                project.category.toLowerCase().includes(selectedCategory.toLowerCase());
+
+            const query = searchQuery.trim().toLowerCase();
+            const matchesSearch =
+                !query ||
+                project.title.toLowerCase().includes(query) ||
+                project.description.toLowerCase().includes(query) ||
+                project.category.toLowerCase().includes(query) ||
+                project.technologies.some((t) => t.label.toLowerCase().includes(query));
+
+            return matchesCategory && matchesSearch;
+        });
+    }, [selectedCategory, searchQuery]);
+
     return (
         <section id="projects" className="py-28 relative overflow-hidden">
             {/* Background Glow Accents */}
             <div className="absolute top-1/4 left-0 w-96 h-96 rounded-full bg-neon-purple/5 blur-3xl pointer-events-none" />
-            <div className="absolute bottom-1/4 right-0 w-96 h-96 rounded-full bg-neon-blue/5 blur-3xl pointer-events-none" />
+            <div className="absolute top-2/3 right-0 w-96 h-96 rounded-full bg-neon-blue/5 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-1/4 left-1/3 w-80 h-80 rounded-full bg-neon-cyan/5 blur-3xl pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6">
-                {/* Section Header */}
+                {/* ══════════════════════════════════════════
+                    1. FEATURED PROJECTS (Case Studies)
+                ══════════════════════════════════════════ */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -581,23 +989,128 @@ export default function Projects() {
                 >
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-blue" />
-                        <span className="text-neon-blue text-sm font-mono tracking-widest uppercase">My Work</span>
+                        <span className="text-neon-blue text-sm font-mono tracking-widest uppercase">
+                            Major Applications
+                        </span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-neon-blue" />
                     </div>
                     <h2 className="section-title gradient-text">Featured Projects</h2>
                     <p className="text-slate-300 mt-4 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
-                        A collection of projects I've built — from full-stack web applications to AI experiments.
+                        A collection of primary applications and systems I've built — from full-stack platforms to deployed AI solutions.
                     </p>
                     <p className="text-slate-500 mt-1 max-w-2xl mx-auto text-xs sm:text-sm">
-                        Each project represents a real problem, a practical solution, and a step forward in my development journey.
+                        Each case study highlights real problem-solving, architectural implementation, and end-to-end functionality.
                     </p>
                 </motion.div>
 
-                {/* Single Vertical Stack of Large Split Cards */}
-                <div className="flex flex-col gap-10 sm:gap-14">
-                    {projects.map((project, index) => (
+                {/* Stack of 9 Featured Large Split Cards */}
+                <div className="flex flex-col gap-10 sm:gap-14 mb-28">
+                    {featuredProjects.map((project, index) => (
                         <ProjectShowcaseCard key={project.id} project={project} index={index} />
                     ))}
+                </div>
+
+                {/* ══════════════════════════════════════════
+                    2. MORE PROJECTS & EXPERIMENTS
+                ══════════════════════════════════════════ */}
+                <div className="pt-16 border-t border-white/10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.7 }}
+                        className="text-center mb-10"
+                    >
+                        <div className="flex items-center justify-center gap-3 mb-4">
+                            <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-purple" />
+                            <span className="text-neon-purple text-sm font-mono tracking-widest uppercase">
+                                Technical Explorations
+                            </span>
+                            <div className="h-px w-12 bg-gradient-to-l from-transparent to-neon-purple" />
+                        </div>
+                        <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                            More Projects &amp; Experiments
+                        </h3>
+                        <p className="text-slate-300 mt-3 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+                            Additional applications, experiments, academic projects, and technical explorations I've built while learning and experimenting with different technologies.
+                        </p>
+                        <div className="mt-4 flex items-center justify-center gap-2">
+                            <span className="text-xs font-mono text-neon-cyan px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30">
+                                {additionalProjects.length} Additional Projects &amp; Experiments
+                            </span>
+                        </div>
+                    </motion.div>
+
+                    {/* Filter Pills & Search Bar */}
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+                        {/* Categories */}
+                        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 w-full md:w-auto">
+                            {FILTER_CATEGORIES.map((cat) => {
+                                const isSelected = selectedCategory === cat;
+                                return (
+                                    <button
+                                        key={cat}
+                                        onClick={() => setSelectedCategory(cat)}
+                                        className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+                                            isSelected
+                                                ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold shadow-md shadow-neon-blue/20'
+                                                : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 border border-white/10'
+                                        }`}
+                                    >
+                                        {cat}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Search Input */}
+                        <div className="relative w-full md:w-72">
+                            <LuSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm" />
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search projects..."
+                                className="w-full pl-9 pr-8 py-2 text-xs rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-neon-cyan/60 transition-colors"
+                            />
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery('')}
+                                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white text-xs cursor-pointer"
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Compact Cards Grid */}
+                    {filteredAdditionalProjects.length > 0 ? (
+                        <motion.div
+                            layout
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        >
+                            <AnimatePresence>
+                                {filteredAdditionalProjects.map((project) => (
+                                    <AdditionalProjectCard key={project.id} project={project} />
+                                ))}
+                            </AnimatePresence>
+                        </motion.div>
+                    ) : (
+                        <div className="glass rounded-2xl p-12 text-center border border-white/10">
+                            <LuSearch className="text-3xl text-slate-500 mx-auto mb-3" />
+                            <p className="text-slate-300 font-medium">No projects match your current filter or search.</p>
+                            <button
+                                onClick={() => {
+                                    setSelectedCategory('All');
+                                    setSearchQuery('');
+                                }}
+                                className="mt-3 text-xs font-mono text-neon-cyan hover:underline cursor-pointer"
+                            >
+                                Reset all filters
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
