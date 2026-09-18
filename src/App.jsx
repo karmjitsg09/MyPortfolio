@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import './index.css';
 import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
+import GlobalBackground from './components/GlobalBackground';
 
 // Section imports
 import Hero from './components/Hero';
@@ -57,7 +58,8 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-dark text-slate-100 overflow-x-hidden">
+    <div className="min-h-screen bg-dark text-slate-100 overflow-x-hidden relative">
+      <GlobalBackground />
       <CustomCursor />
       <SectionErrorBoundary>
         <Navbar />
