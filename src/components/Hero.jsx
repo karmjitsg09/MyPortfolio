@@ -2,8 +2,8 @@ import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
-import ParticleBackground from './ParticleBackground';
 import { featuredProjects, projects } from './Projects';
+import { hackathons } from './Hackathons';
 
 const roles = [
     'Full-Stack Developer',
@@ -330,8 +330,8 @@ export default function Hero() {
                     >
                         {[
                             { value: featuredProjects.length, label: 'Featured Full-Stack & AI Projects' },
-                            { value: 'Deployed', label: 'Real-World Apps' },
-                            { value: 'Hackathons', label: 'Replit × Polaris' },
+                            { value: hackathons.length, label: 'Hackathons Participated' },
+                            { value: 'Replit × Polaris', label: 'Vibeathon 2025' },
                             { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },
                         ].map((stat) => (
                             <div key={stat.label} className="group">
