@@ -80,7 +80,7 @@ export default function About() {
                             {/* Quick facts grid */}
                             <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                 {[
-                                    { label: 'Role Focus', value: 'Junior Full-Stack Dev' },
+                                    { label: 'Role Focus', value: 'Full-Stack Developer' },
                                     { label: 'Education', value: '2nd Year B.Tech (AI/ML)' },
                                     { label: 'Institution', value: 'Yenepoya (Kalvium)' },
                                     { label: 'Core Stack', value: 'React, Node, TS, SQL' },

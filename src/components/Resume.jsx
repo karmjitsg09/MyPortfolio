@@ -113,7 +113,7 @@ export default function Resume() {
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">Interested in working together?</h3>
                     <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed">
-                        I'm currently exploring <span className="text-neon-cyan font-semibold">Junior Full-Stack Developer</span> opportunities to contribute to real-world software projects and grow as a full-stack developer.
+                        I'm currently exploring <span className="text-neon-cyan font-semibold">Full-Stack Developer</span> opportunities to contribute to real-world software projects and grow as a full-stack developer.
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                         <motion.a
