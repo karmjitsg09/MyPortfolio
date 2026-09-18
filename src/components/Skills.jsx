@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     SiPython, SiJavascript, SiTypescript, SiHtml5, SiCss, SiReact,
@@ -8,12 +8,15 @@ import {
     SiGit, SiGithub, SiVercel, SiRender, SiReplit, SiLinux, SiN8N
 } from 'react-icons/si';
 import { FaServer, FaDatabase, FaBrain, FaTools, FaCode } from 'react-icons/fa';
+import { LuNetwork, LuSparkles } from 'react-icons/lu';
 
 const skillGroups = [
     {
+        id: 'frontend',
         category: 'Frontend Development',
         color: 'purple',
         icon: FaCode,
+        description: 'Component architecture, responsive UI, client state, and modern SSR frameworks.',
         skills: [
             { name: 'HTML5', icon: SiHtml5, color: '#f97316' },
             { name: 'CSS3', icon: SiCss, color: '#38bdf8' },
@@ -25,9 +28,11 @@ const skillGroups = [
         ],
     },
     {
+        id: 'backend',
         category: 'Backend & APIs',
         color: 'blue',
         icon: FaServer,
+        description: 'Server runtime environments, RESTful route architectures, and API middleware.',
         skills: [
             { name: 'Node.js', icon: SiNodedotjs, color: '#22c55e' },
             { name: 'Express.js', icon: SiExpress, color: '#e2e8f0' },
@@ -37,9 +42,11 @@ const skillGroups = [
         ],
     },
     {
+        id: 'database',
         category: 'Database & Storage',
         color: 'cyan',
         icon: FaDatabase,
+        description: 'Relational data models, document stores, authentication, and cloud databases.',
         skills: [
             { name: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
             { name: 'Supabase', icon: SiSupabase, color: '#3ecf8e' },
@@ -48,9 +55,11 @@ const skillGroups = [
         ],
     },
     {
+        id: 'ai',
         category: 'AI / ML & Integrations',
         color: 'pink',
         icon: FaBrain,
+        description: 'Deep learning frameworks, computer vision pipelines, and LLM integrations.',
         skills: [
             { name: 'Python', icon: SiPython, color: '#38bdf8' },
             { name: 'TensorFlow', icon: SiTensorflow, color: '#ff6f00' },
@@ -60,9 +69,11 @@ const skillGroups = [
         ],
     },
     {
+        id: 'devops',
         category: 'Tools & Deployment',
         color: 'green',
         icon: FaTools,
+        description: 'Version control workflows, cloud host deployments, and workflow automation.',
         skills: [
             { name: 'Git', icon: SiGit, color: '#f97316' },
             { name: 'GitHub', icon: SiGithub, color: '#e2e8f0' },
@@ -76,17 +87,55 @@ const skillGroups = [
 ];
 
 const colorMap = {
-    blue: { border: 'border-neon-blue/30', glow: 'hover:shadow-neon-blue', tag: 'text-neon-blue', bg: 'bg-neon-blue/5', title: 'neon-text-blue' },
-    purple: { border: 'border-neon-purple/30', glow: 'hover:shadow-neon-purple', tag: 'text-neon-purple', bg: 'bg-neon-purple/5', title: 'neon-text-purple' },
-    cyan: { border: 'border-neon-cyan/30', glow: 'hover:shadow-neon-cyan', tag: 'text-neon-cyan', bg: 'bg-neon-cyan/5', title: 'neon-text-cyan' },
-    pink: { border: 'border-pink-500/30', glow: 'hover:shadow-pink-500/30', tag: 'text-pink-400', bg: 'bg-pink-500/5', title: 'text-pink-400' },
-    green: { border: 'border-emerald-500/30', glow: 'hover:shadow-emerald-500/30', tag: 'text-emerald-400', bg: 'bg-emerald-500/5', title: 'text-emerald-400' },
+    blue: {
+        border: 'border-neon-blue/30',
+        glow: 'hover:shadow-neon-blue/30',
+        tag: 'text-neon-blue',
+        bg: 'bg-neon-blue/5',
+        title: 'neon-text-blue',
+        badge: 'text-neon-blue border-neon-blue/30 bg-neon-blue/10',
+    },
+    purple: {
+        border: 'border-neon-purple/30',
+        glow: 'hover:shadow-neon-purple/30',
+        tag: 'text-neon-purple',
+        bg: 'bg-neon-purple/5',
+        title: 'neon-text-purple',
+        badge: 'text-neon-purple border-neon-purple/30 bg-neon-purple/10',
+    },
+    cyan: {
+        border: 'border-neon-cyan/30',
+        glow: 'hover:shadow-neon-cyan/30',
+        tag: 'text-neon-cyan',
+        bg: 'bg-neon-cyan/5',
+        title: 'neon-text-cyan',
+        badge: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10',
+    },
+    pink: {
+        border: 'border-pink-500/30',
+        glow: 'hover:shadow-pink-500/30',
+        tag: 'text-pink-400',
+        bg: 'bg-pink-500/5',
+        title: 'text-pink-400',
+        badge: 'text-pink-400 border-pink-500/30 bg-pink-500/10',
+    },
+    green: {
+        border: 'border-emerald-500/30',
+        glow: 'hover:shadow-emerald-500/30',
+        tag: 'text-emerald-400',
+        bg: 'bg-emerald-500/5',
+        title: 'text-emerald-400',
+        badge: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
+    },
 };
 
 export default function Skills() {
+    const [activeGroup, setActiveGroup] = useState(null);
+    const [hoveredSkill, setHoveredSkill] = useState(null);
+
     return (
         <section id="skills" className="py-28 relative overflow-hidden grid-bg">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neon-purple/3 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neon-purple/5 to-transparent pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6">
                 {/* Title */}
@@ -99,52 +148,104 @@ export default function Skills() {
                 >
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-purple" />
-                        <span className="text-neon-purple text-sm font-mono tracking-widest uppercase">Technical Stack</span>
+                        <span className="text-neon-purple text-sm font-mono tracking-widest uppercase">
+                            Technical Ecosystem
+                        </span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-neon-purple" />
                     </div>
                     <h2 className="section-title gradient-text">Skills &amp; Technologies</h2>
-                    <p className="text-slate-400 text-sm max-w-xl mx-auto mt-3">
-                        Technologies I use for building full-stack web applications, database systems, and AI-enabled software.
+                    <p className="text-slate-400 text-sm sm:text-base max-w-xl mx-auto mt-3">
+                        Full-stack, database, and machine learning technologies I use for production-grade software and AI applications.
                     </p>
                 </motion.div>
 
-                {/* Skill Groups */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {skillGroups.map((group, gi) => {
-                        const c = colorMap[group.color];
-                        const GroupIcon = group.icon;
+                {/* Central Hub View Header / Filter Pills */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+                    <button
+                        onClick={() => setActiveGroup(null)}
+                        className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+                            activeGroup === null
+                                ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold shadow-md shadow-neon-blue/20'
+                                : 'glass text-slate-400 hover:text-white border border-white/10'
+                        }`}
+                    >
+                        <LuNetwork className="inline-block mr-1.5 text-sm" /> All Stacks
+                    </button>
+                    {skillGroups.map((g) => {
+                        const isSelected = activeGroup === g.id;
                         return (
-                            <motion.div
-                                key={group.category}
-                                initial={{ opacity: 0, y: 40 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, amount: 0.2 }}
-                                transition={{ duration: 0.6, delay: gi * 0.1 }}
-                                className={`glass rounded-2xl p-6 border ${c.border} hover:scale-[1.02] transition-all duration-300 ${c.glow} flex flex-col`}
+                            <button
+                                key={g.id}
+                                onClick={() => setActiveGroup(isSelected ? null : g.id)}
+                                className={`px-4 py-2 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
+                                    isSelected
+                                        ? 'bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold shadow-md shadow-neon-blue/20'
+                                        : 'glass text-slate-400 hover:text-white border border-white/10'
+                                }`}
                             >
-                                <h3 className={`text-base font-bold mb-4 ${c.title} flex items-center gap-2`}>
-                                    <GroupIcon className="text-base" />
-                                    {group.category}
-                                </h3>
-                                <div className="flex flex-wrap gap-2.5 mt-auto">
-                                    {group.skills.map((skill, si) => (
-                                        <motion.div
-                                            key={skill.name}
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true }}
-                                            transition={{ duration: 0.3, delay: gi * 0.08 + si * 0.04 }}
-                                            whileHover={{ scale: 1.06, y: -2 }}
-                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${c.bg} border ${c.border} cursor-default transition-all duration-200`}
-                                        >
-                                            <skill.icon style={{ color: skill.color }} className="text-base flex-shrink-0" />
-                                            <span className="text-xs font-medium text-slate-300">{skill.name}</span>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </motion.div>
+                                <g.icon className="text-xs" />
+                                {g.category}
+                            </button>
                         );
                     })}
+                </div>
+
+                {/* Skill Groups Grid */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {skillGroups
+                        .filter((group) => activeGroup === null || activeGroup === group.id)
+                        .map((group, gi) => {
+                            const c = colorMap[group.color];
+                            const GroupIcon = group.icon;
+                            return (
+                                <motion.div
+                                    layout
+                                    key={group.category}
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, amount: 0.2 }}
+                                    transition={{ duration: 0.5, delay: gi * 0.08 }}
+                                    whileHover={{ y: -4 }}
+                                    className={`glass rounded-2xl p-6 border ${c.border} transition-all duration-300 ${c.glow} flex flex-col justify-between group relative overflow-hidden`}
+                                >
+                                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                    <div>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <h3 className={`text-base font-bold ${c.title} flex items-center gap-2`}>
+                                                <GroupIcon className="text-base flex-shrink-0" />
+                                                {group.category}
+                                            </h3>
+                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${c.badge}`}>
+                                                {group.skills.length} tools
+                                            </span>
+                                        </div>
+                                        <p className="text-xs text-slate-400 leading-relaxed mb-6">
+                                            {group.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+                                        {group.skills.map((skill) => (
+                                            <motion.div
+                                                key={skill.name}
+                                                whileHover={{ scale: 1.08, y: -2 }}
+                                                onMouseEnter={() => setHoveredSkill(skill.name)}
+                                                onMouseLeave={() => setHoveredSkill(null)}
+                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${c.bg} border ${c.border} cursor-default transition-all duration-200 ${
+                                                    hoveredSkill === skill.name
+                                                        ? 'border-neon-cyan shadow-sm shadow-neon-cyan/30'
+                                                        : ''
+                                                }`}
+                                            >
+                                                <skill.icon style={{ color: skill.color }} className="text-sm flex-shrink-0" />
+                                                <span className="text-xs font-medium text-slate-200">{skill.name}</span>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
                 </div>
 
                 {/* Recruiter-friendly Technology Summary Banner */}
@@ -153,22 +254,22 @@ export default function Skills() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="mt-10 glass rounded-2xl p-6 border border-neon-blue/20 flex flex-col md:flex-row items-center justify-between gap-6"
+                    className="mt-10 glass rounded-2xl p-6 sm:p-8 border border-neon-blue/25 flex flex-col lg:flex-row items-center justify-between gap-6"
                 >
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center text-dark font-black text-xl flex-shrink-0">
-                            ⚡
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-neon-blue via-neon-purple to-neon-cyan flex items-center justify-center text-dark font-black text-xl flex-shrink-0 shadow-lg shadow-neon-blue/20">
+                            <LuSparkles className="text-xl text-dark" />
                         </div>
                         <div>
                             <h4 className="text-base font-bold text-white">Production Stack Snapshot</h4>
-                            <p className="text-xs text-slate-400 mt-0.5">
-                                Primary focus: React / Next.js, Node.js / Express, PostgreSQL / Supabase, and AI API integrations.
+                            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                                Core focus: React / Next.js, Node.js / Express, PostgreSQL / Supabase, and AI API integrations.
                             </p>
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-end">
+                    <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
                         {['TypeScript', 'React.js', 'Next.js', 'Node.js', 'PostgreSQL', 'Python', 'Gemini AI', 'Vercel'].map((t) => (
-                            <span key={t} className="px-3 py-1 text-xs font-mono font-semibold rounded-md bg-neon-blue/10 text-neon-blue border border-neon-blue/30">
+                            <span key={t} className="px-3 py-1 text-xs font-mono font-semibold rounded-lg bg-neon-blue/10 text-neon-cyan border border-neon-blue/30">
                                 {t}
                             </span>
                         ))}

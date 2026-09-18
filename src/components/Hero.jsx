@@ -1,5 +1,5 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
 import ParticleBackground from './ParticleBackground';
@@ -64,7 +64,7 @@ function TypewriterText({ texts }) {
                     setDisplayText(current.substring(0, charIndex + 1));
                     setCharIndex(charIndex + 1);
                 } else {
-                    setTimeout(() => setIsDeleting(true), 1500);
+                    setTimeout(() => setIsDeleting(true), 1600);
                 }
             } else {
                 if (charIndex > 0) {
@@ -75,14 +75,14 @@ function TypewriterText({ texts }) {
                     setCurrentIndex((currentIndex + 1) % texts.length);
                 }
             }
-        }, isDeleting ? 50 : 90);
+        }, isDeleting ? 45 : 85);
         return () => clearTimeout(timeout);
     }, [charIndex, isDeleting, currentIndex, texts]);
 
     return (
-        <span>
+        <span className="inline-flex items-center">
             <span className="neon-text-cyan">{displayText}</span>
-            <span className="cursor neon-text-blue">|</span>
+            <span className="cursor neon-text-blue ml-0.5">|</span>
         </span>
     );
 }
@@ -97,7 +97,7 @@ function ProfileImage() {
     return (
         <motion.div
             className="relative flex-shrink-0"
-            animate={{ y: [0, -14, 0] }}
+            animate={{ y: [0, -12, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             whileHover={{ scale: 1.06 }}
         >
@@ -130,7 +130,6 @@ function ProfileImage() {
                         alt="Karmjit SG"
                         className="w-full h-full rounded-full object-cover object-center"
                         onError={(e) => {
-                            // Fallback: show gradient avatar if image missing
                             e.target.style.display = 'none';
                             e.target.parentNode.style.background = 'linear-gradient(135deg, #00d4ff, #b400ff)';
                             e.target.parentNode.innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:#030712;border-radius:50%;">K</div>`;
@@ -173,8 +172,28 @@ class CanvasErrorBoundary extends React.Component {
 }
 
 export default function Hero() {
+    // Parallax mouse position
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springX = useSpring(mouseX, { damping: 30, stiffness: 200 });
+    const springY = useSpring(mouseY, { damping: 30, stiffness: 200 });
+
+    const heroParallaxX = useTransform(springX, [-0.5, 0.5], [-12, 12]);
+    const heroParallaxY = useTransform(springY, [-0.5, 0.5], [-12, 12]);
+
+    const handleMouseMove = (e) => {
+        const { innerWidth, innerHeight } = window;
+        mouseX.set((e.clientX / innerWidth) - 0.5);
+        mouseY.set((e.clientY / innerHeight) - 0.5);
+    };
+
     return (
-        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden grid-bg">
+        <section
+            id="hero"
+            onMouseMove={handleMouseMove}
+            className="relative min-h-screen flex items-center overflow-hidden grid-bg"
+        >
             <ParticleBackground />
 
             {/* Radial gradient overlay */}
@@ -184,121 +203,152 @@ export default function Hero() {
             />
 
             {/* Ambient glows */}
-            <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-neon-blue/5 blur-3xl pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-neon-purple/5 blur-3xl pointer-events-none" />
+            <div className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-neon-blue/10 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-neon-purple/10 blur-3xl pointer-events-none" />
 
-            <div className="relative max-w-7xl mx-auto px-6 pt-24 pb-12 grid lg:grid-cols-2 gap-12 items-center w-full">
-                {/* Left – Text Content */}
-                <div>
+            <div className="relative max-w-7xl mx-auto px-6 pt-28 pb-16 grid lg:grid-cols-2 gap-12 items-center w-full">
+                {/* Left – Text Content with Entrance Sequence */}
+                <motion.div
+                    style={{ x: heroParallaxX, y: heroParallaxY }}
+                    className="relative z-10"
+                >
+                    {/* Badge */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.1 }}
+                        className="flex items-center gap-3 mb-6"
                     >
-                        {/* Badge */}
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="h-px w-12 bg-neon-blue" />
-                            <span className="text-neon-blue text-xs sm:text-sm font-mono tracking-widest uppercase">
-                                2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer
-                            </span>
-                        </div>
+                        <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-blue" />
+                        <span className="text-neon-blue text-xs sm:text-sm font-mono tracking-widest uppercase px-3 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 shadow-sm">
+                            2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer
+                        </span>
+                    </motion.div>
 
-                        {/* ── Profile photo + Name on one line ── */}
-                        <div className="flex items-center gap-5 mb-4">
-                            <ProfileImage />
-                            <div>
-                                <h1 className="font-black leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4.2rem)' }}>
-                                    <span className="gradient-text">Karmjit</span>
-                                    {' '}
-                                    <span
-                                        style={{
-                                            background: 'linear-gradient(90deg, #b400ff, #00d4ff)',
-                                            backgroundClip: 'text',
-                                            WebkitBackgroundClip: 'text',
-                                            WebkitTextFillColor: 'transparent',
-                                        }}
-                                    >
-                                        SG
-                                    </span>
-                                </h1>
-                                <p className="text-sm sm:text-base text-neon-blue font-mono font-medium mt-1">
-                                    Full-Stack Developer &amp; AI/ML Student
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Typewriter role */}
-                        <h2 className="text-xl sm:text-2xl font-medium text-slate-300 mb-3 h-9">
-                            <TypewriterText texts={roles} />
-                        </h2>
-
-                        <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mb-8">
-                            I build <span className="text-white font-semibold">full-stack web applications</span>,{' '}
-                            <span className="neon-text-cyan font-medium">AI-powered products</span>, and practical digital experiences using modern web technologies.
-                        </p>
-
-                        {/* Hero CTAs */}
-                        <div className="flex flex-wrap gap-3 sm:gap-4 mb-8">
-                            <motion.button
-                                onClick={() => scrollTo('projects')}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl transition-all duration-300 cursor-pointer shadow-neon-blue"
+                    {/* ── Profile photo + Name on one line ── */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.7, delay: 0.25 }}
+                        className="flex items-center gap-5 mb-4"
+                    >
+                        <ProfileImage />
+                        <div>
+                            <h1
+                                className="font-black leading-none tracking-tight"
+                                style={{ fontSize: 'clamp(2.4rem, 5vw, 4.2rem)' }}
                             >
-                                ⚡ View Projects
-                            </motion.button>
-                            <motion.a
-                                href="https://github.com/karmjitsg09"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-6 py-3.5 border border-white/20 bg-white/5 text-white font-bold rounded-xl hover:border-neon-cyan hover:text-neon-cyan transition-all duration-300"
-                            >
-                                GitHub
-                            </motion.a>
-                            <motion.button
-                                onClick={() => scrollTo('contact')}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-6 py-3.5 border border-neon-blue text-neon-blue font-bold rounded-xl hover:bg-neon-blue/10 transition-all duration-300 cursor-pointer"
-                            >
-                                Contact Me
-                            </motion.button>
-                            <motion.a
-                                href="/Resume%201st%20year.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-6 py-3.5 border border-neon-purple text-neon-purple font-bold rounded-xl hover:bg-neon-purple/10 transition-all duration-300"
-                            >
-                                Resume ↗
-                            </motion.a>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="flex flex-wrap gap-6 sm:gap-10 pt-6 border-t border-white/10">
-                            {[
-                                { value: featuredProjects.length, label: 'Featured Full-Stack & AI Projects' },
-                                { value: 'Deployed', label: 'Real-World Apps' },
-                                { value: 'Hackathons', label: 'Replit × Polaris' },
-                                { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },
-                            ].map((stat) => (
-                                <div key={stat.label}>
-                                    <div className="text-xl sm:text-2xl font-bold neon-text-blue">{stat.value}</div>
-                                    <div className="text-xs text-slate-400 mt-0.5">{stat.label}</div>
-                                </div>
-                            ))}
+                                <span className="gradient-text">Karmjit</span>{' '}
+                                <span
+                                    style={{
+                                        background: 'linear-gradient(90deg, #b400ff, #00d4ff)',
+                                        backgroundClip: 'text',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                    }}
+                                >
+                                    SG
+                                </span>
+                            </h1>
+                            <p className="text-sm sm:text-base text-neon-blue font-mono font-medium mt-1">
+                                Full-Stack Developer &amp; AI/ML Student
+                            </p>
                         </div>
                     </motion.div>
-                </div>
 
-                {/* Right – 3D Canvas */}
+                    {/* Typewriter role */}
+                    <motion.h2
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="text-xl sm:text-2xl font-medium text-slate-300 mb-3 h-9"
+                    >
+                        <TypewriterText texts={roles} />
+                    </motion.h2>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mb-8"
+                    >
+                        I build <span className="text-white font-semibold">full-stack web applications</span>,{' '}
+                        <span className="neon-text-cyan font-medium">AI-powered products</span>, and practical digital experiences using modern web technologies.
+                    </motion.p>
+
+                    {/* Hero CTAs */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.6 }}
+                        className="flex flex-wrap gap-3 sm:gap-4 mb-8"
+                    >
+                        <motion.button
+                            onClick={() => scrollTo('projects')}
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl transition-all duration-300 cursor-pointer shadow-lg shadow-neon-blue/25 hover:shadow-neon-blue/50"
+                        >
+                            ⚡ View Projects
+                        </motion.button>
+                        <motion.a
+                            href="https://github.com/karmjitsg09"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center gap-2 px-6 py-3.5 border border-white/20 bg-white/5 text-white font-bold rounded-xl hover:border-neon-cyan hover:text-neon-cyan hover:bg-neon-cyan/5 transition-all duration-300"
+                        >
+                            GitHub
+                        </motion.a>
+                        <motion.button
+                            onClick={() => scrollTo('contact')}
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center gap-2 px-6 py-3.5 border border-neon-blue/60 text-neon-blue font-bold rounded-xl hover:bg-neon-blue/15 hover:border-neon-blue transition-all duration-300 cursor-pointer"
+                        >
+                            Contact Me
+                        </motion.button>
+                        <motion.a
+                            href="/Resume%201st%20year.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center gap-2 px-6 py-3.5 border border-neon-purple/60 text-neon-purple font-bold rounded-xl hover:bg-neon-purple/15 hover:border-neon-purple transition-all duration-300"
+                        >
+                            Resume ↗
+                        </motion.a>
+                    </motion.div>
+
+                    {/* Stats Bar */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.7, delay: 0.75 }}
+                        className="flex flex-wrap gap-6 sm:gap-10 pt-6 border-t border-white/10"
+                    >
+                        {[
+                            { value: featuredProjects.length, label: 'Featured Full-Stack & AI Projects' },
+                            { value: 'Deployed', label: 'Real-World Apps' },
+                            { value: 'Hackathons', label: 'Replit × Polaris' },
+                            { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },
+                        ].map((stat) => (
+                            <div key={stat.label} className="group">
+                                <div className="text-xl sm:text-2xl font-bold neon-text-blue group-hover:text-neon-cyan transition-colors">
+                                    {stat.value}
+                                </div>
+                                <div className="text-xs text-slate-400 mt-0.5">{stat.label}</div>
+                            </div>
+                        ))}
+                    </motion.div>
+                </motion.div>
+
+                {/* Right – 3D Canvas with Parallax Reaction */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.85 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, delay: 0.4 }}
+                    transition={{ duration: 1, delay: 0.3 }}
                     className="h-[420px] sm:h-[500px] lg:h-[560px] relative"
                 >
                     <CanvasErrorBoundary>
@@ -316,16 +366,25 @@ export default function Hero() {
                         </Canvas>
                     </CanvasErrorBoundary>
 
-                    {/* Holographic labels */}
-                    <div className="absolute top-8 right-8 glass px-3 py-2 rounded-lg animate-float text-xs font-mono neon-text-blue">
-                        &lt;dev /&gt;
-                    </div>
-                    <div className="absolute bottom-16 left-8 glass px-3 py-2 rounded-lg animate-float-reverse text-xs font-mono neon-text-purple">
-                        AI.init()
-                    </div>
-                    <div className="absolute top-1/2 right-4 glass px-3 py-2 rounded-lg animate-float-slow text-xs font-mono neon-text-cyan">
-                        git push
-                    </div>
+                    {/* Holographic interactive labels */}
+                    <motion.div
+                        whileHover={{ scale: 1.15, y: -4 }}
+                        className="absolute top-8 right-8 glass px-3.5 py-2 rounded-xl animate-float text-xs font-mono neon-text-blue border border-neon-blue/30 shadow-lg cursor-pointer"
+                    >
+                        &lt;full-stack /&gt;
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.15, y: -4 }}
+                        className="absolute bottom-16 left-8 glass px-3.5 py-2 rounded-xl animate-float-reverse text-xs font-mono neon-text-purple border border-neon-purple/30 shadow-lg cursor-pointer"
+                    >
+                        AI.predict()
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.15, y: -4 }}
+                        className="absolute top-1/2 right-4 glass px-3.5 py-2 rounded-xl animate-float-slow text-xs font-mono neon-text-cyan border border-neon-cyan/30 shadow-lg cursor-pointer"
+                    >
+                        git push origin main
+                    </motion.div>
                 </motion.div>
             </div>
 
@@ -333,15 +392,16 @@ export default function Hero() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2 }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                transition={{ delay: 1.5 }}
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer"
+                onClick={() => scrollTo('about')}
             >
-                <span className="text-xs text-slate-600 font-mono">scroll down</span>
+                <span className="text-[11px] text-slate-500 font-mono tracking-wider">SCROLL</span>
                 <div className="w-5 h-8 border border-slate-700 rounded-full flex justify-center pt-1.5">
                     <motion.div
                         animate={{ y: [0, 10, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        className="w-1 h-2 bg-neon-blue rounded-full"
+                        className="w-1 h-2 bg-neon-cyan rounded-full"
                     />
                 </div>
             </motion.div>

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
     FaGithub,
     FaExternalLinkAlt,
@@ -676,24 +676,56 @@ function TechBadge({ tech, compact = false }) {
 }
 
 /* ─────────────────────────────────────────
-   REUSABLE LARGE SPLIT PROJECT CARD (Case Studies)
+   REUSABLE LARGE SPLIT PROJECT CARD (Case Studies with subtle 3D tilt)
 ───────────────────────────────────────── */
 function ProjectShowcaseCard({ project, index }) {
     const isEven = index % 2 === 0;
     const IconComponent = project.icon;
     const VisualIcon = project.visual.icon;
 
+    const cardRef = useRef(null);
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseXSpring = useSpring(x, { stiffness: 200, damping: 25 });
+    const mouseYSpring = useSpring(y, { stiffness: 200, damping: 25 });
+
+    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['3deg', '-3deg']);
+    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-3deg', '3deg']);
+
+    const handleMouseMove = (e) => {
+        if (!cardRef.current) return;
+        const rect = cardRef.current.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        x.set(mouseX / width - 0.5);
+        y.set(mouseY / height - 0.5);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
     return (
         <motion.div
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+                rotateX,
+                rotateY,
+                transformStyle: 'preserve-3d',
+                boxShadow: `0 10px 40px -10px ${project.glow}`,
+            }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.05 }}
             whileHover={{ y: -4 }}
-            className={`relative glass rounded-3xl border ${project.border} overflow-hidden transition-all duration-500`}
-            style={{
-                boxShadow: `0 10px 40px -10px ${project.glow}`,
-            }}
+            className={`relative glass rounded-3xl border ${project.border} overflow-hidden transition-all duration-300`}
         >
             {/* Top Tri-colour Accent Bar */}
             <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.accent} z-20`} />
@@ -721,7 +753,7 @@ function ProjectShowcaseCard({ project, index }) {
 
                         {/* Project Icon + Title */}
                         <div className="flex items-center gap-3.5 mb-3">
-                            <div className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0">
+                            <div className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 shadow-sm">
                                 <IconComponent className="text-2xl text-white" />
                             </div>
                             <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
@@ -761,26 +793,30 @@ function ProjectShowcaseCard({ project, index }) {
                             ))}
                         </div>
 
-                        {/* Action Buttons */}
+                        {/* Action Buttons with magnetic spring */}
                         <div className="flex flex-wrap items-center gap-3.5">
-                            <a
+                            <motion.a
                                 href={project.github}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all text-sm font-semibold"
+                                whileHover={{ scale: 1.05, y: -2 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 hover:text-white hover:border-white/30 hover:bg-white/10 transition-all text-sm font-semibold cursor-pointer"
                             >
                                 <FaGithub className="text-base" /> GitHub
-                            </a>
+                            </motion.a>
 
                             {project.live ? (
-                                <a
+                                <motion.a
                                     href={project.live}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold text-sm hover:brightness-110 shadow-lg shadow-neon-blue/20 transition-all duration-300"
+                                    whileHover={{ scale: 1.05, y: -2 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold text-sm hover:brightness-110 shadow-lg shadow-neon-blue/20 transition-all duration-300 cursor-pointer"
                                 >
                                     <FaExternalLinkAlt className="text-xs" /> Live Demo
-                                </a>
+                                </motion.a>
                             ) : null}
                         </div>
                     </div>
@@ -810,8 +846,11 @@ function ProjectShowcaseCard({ project, index }) {
                     <div className="relative z-10 w-full max-w-md space-y-6">
                         {/* Central Large Icon Hub */}
                         <div className="flex justify-center my-2">
-                            <div className="relative">
-                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl glass-strong border border-white/20 flex items-center justify-center shadow-2xl backdrop-blur-xl">
+                            <motion.div
+                                whileHover={{ scale: 1.08 }}
+                                className="relative cursor-pointer"
+                            >
+                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl glass-strong border border-white/20 flex items-center justify-center shadow-2xl backdrop-blur-xl group-hover:border-neon-cyan/50">
                                     <VisualIcon
                                         style={{ color: project.visual.iconColor }}
                                         className="text-4xl sm:text-5xl drop-shadow-[0_0_15px_rgba(0,212,255,0.5)]"
@@ -820,7 +859,7 @@ function ProjectShowcaseCard({ project, index }) {
                                 <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-400 border-2 border-slate-900 shadow-md flex items-center justify-center">
                                     <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                                 </span>
-                            </div>
+                            </motion.div>
                         </div>
 
                         {/* Feature Status Cards */}
@@ -828,7 +867,7 @@ function ProjectShowcaseCard({ project, index }) {
                             {project.visual.features.map((item) => (
                                 <div
                                     key={item.label}
-                                    className="glass-strong rounded-xl p-3.5 border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between bg-black/40 backdrop-blur-md"
+                                    className="glass-strong rounded-xl p-3.5 border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between bg-black/40 backdrop-blur-md hover:bg-black/60"
                                 >
                                     <span className="text-xs font-mono text-slate-400 truncate mb-1">
                                         {item.label}
@@ -912,7 +951,7 @@ function AdditionalProjectCard({ project }) {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:border-white/30 hover:bg-white/10 text-xs font-semibold transition-all"
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:border-white/30 hover:bg-white/10 text-xs font-semibold transition-all cursor-pointer"
                     >
                         <FaGithub className="text-sm" /> Code
                     </a>
@@ -922,7 +961,7 @@ function AdditionalProjectCard({ project }) {
                             href={project.live}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold text-xs hover:brightness-110 shadow-sm transition-all"
+                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold text-xs hover:brightness-110 shadow-sm transition-all cursor-pointer"
                         >
                             <FaExternalLinkAlt className="text-[10px]" /> Live Demo
                         </a>
@@ -1035,7 +1074,7 @@ export default function Projects() {
                             Additional applications, experiments, academic projects, and technical explorations I've built while learning and experimenting with different technologies.
                         </p>
                         <div className="mt-4 flex items-center justify-center gap-2">
-                            <span className="text-xs font-mono text-neon-cyan px-3 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30">
+                            <span className="text-xs font-mono text-neon-cyan px-3.5 py-1 rounded-full bg-neon-cyan/10 border border-neon-cyan/30 shadow-sm">
                                 {additionalProjects.length} Additional Projects &amp; Experiments
                             </span>
                         </div>

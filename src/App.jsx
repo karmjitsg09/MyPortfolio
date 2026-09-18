@@ -1,6 +1,6 @@
 import './index.css';
-import React, { Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
+import CustomCursor from './components/CustomCursor';
 
 // Section imports
 import Hero from './components/Hero';
@@ -41,6 +41,7 @@ class SectionErrorBoundary extends React.Component {
 function App() {
   return (
     <div className="min-h-screen bg-dark text-slate-100 overflow-x-hidden">
+      <CustomCursor />
       <SectionErrorBoundary>
         <Navbar />
       </SectionErrorBoundary>
