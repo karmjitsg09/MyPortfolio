@@ -2,6 +2,7 @@ import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
+import ParticleBackground from './ParticleBackground';
 import { featuredProjects, projects } from './Projects';
 import { hackathons } from './Hackathons';
 

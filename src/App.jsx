@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
@@ -40,6 +40,22 @@ class SectionErrorBoundary extends React.Component {
 }
 
 function App() {
+  useEffect(() => {
+    // If a hash was specifically requested (e.g. #projects), scroll to it after mount
+    if (window.location.hash) {
+      const targetId = window.location.hash.replace('#', '');
+      const element = document.getElementById(targetId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
+    } else {
+      // Default to top of page (Hero) on initial fresh load
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-dark text-slate-100 overflow-x-hidden">
       <CustomCursor />
