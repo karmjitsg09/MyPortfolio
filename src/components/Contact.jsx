@@ -24,10 +24,11 @@ export default function Contact() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // In a real deployment, integrate with EmailJS or similar
+        const subject = encodeURIComponent(`Portfolio Inquiry from ${form.name}`);
+        const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`);
+        window.location.href = `mailto:sgjitbros@gmail.com?subject=${subject}&body=${body}`;
         setSent(true);
-        setTimeout(() => setSent(false), 4000);
-        setForm({ name: '', email: '', message: '' });
+        setTimeout(() => setSent(false), 5000);
     };
 
     return (

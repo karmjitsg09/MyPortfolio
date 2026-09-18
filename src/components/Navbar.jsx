@@ -6,7 +6,7 @@ const navLinks = [
     { label: 'About', to: 'about' },
     { label: 'Skills', to: 'skills' },
     { label: 'Projects', to: 'projects' },
-    { label: 'Research', to: 'research' },
+    { label: 'Journey', to: 'journey' },
     { label: 'Hackathons', to: 'hackathons' },
     { label: 'Open Source', to: 'opensource' },
     { label: 'Resume', to: 'resume' },

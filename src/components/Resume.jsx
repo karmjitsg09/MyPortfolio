@@ -9,28 +9,28 @@ const resumeHighlights = [
         title: 'Education',
         color: 'blue',
         items: [
-            { label: 'B.Tech Student', desc: 'Yenepoya University (Kalvium)' },
-            { label: 'First Year', desc: 'Computer Science & Engineering' },
+            { label: '2nd-Year B.Tech CSE (AI & ML)', desc: 'Yenepoya University (Kalvium Program)' },
+            { label: 'Academic Focus', desc: 'Full-Stack Development, AI/ML Integrations & Software Architecture' },
         ],
     },
     {
         icon: HiCode,
-        title: 'Technical Skills',
+        title: 'Technical Arsenal',
         color: 'purple',
         items: [
-            { label: 'Languages', desc: 'Python, JavaScript, Java, C++' },
-            { label: 'Web', desc: 'HTML, CSS' },
-            { label: 'Tools', desc: 'Git, GitHub, Linux Terminal' },
+            { label: 'Frontend', desc: 'React.js, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS' },
+            { label: 'Backend & DB', desc: 'Node.js, Express.js, REST APIs, PostgreSQL, Supabase, Firebase' },
+            { label: 'AI & Tools', desc: 'Python, TensorFlow, Google Gemini API, Git, GitHub, Linux, Vercel' },
         ],
     },
     {
         icon: HiBriefcase,
-        title: 'Projects & OS',
+        title: 'Featured Experience & OS',
         color: 'cyan',
         items: [
-            { label: 'Smart Spend', desc: 'Revenue Tracker App' },
-            { label: 'Fighting Game', desc: 'Motion-controlled 2D game' },
-            { label: 'Mathesar', desc: 'Open-source contributor' },
+            { label: 'Full-Stack Applications', desc: 'Lab Allotment System, SmartSpend, CivicBridge, Anushka Knits' },
+            { label: 'Hackathons & Team Projects', desc: 'Vibeathon 2025 (Replit × Polaris), AI Healthcare Hackathon' },
+            { label: 'Open Source Certified', desc: 'Kalvium × Mathesar Open Source Contribution Program' },
         ],
     },
 ];
@@ -57,10 +57,10 @@ export default function Resume() {
                 >
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-blue" />
-                        <span className="text-neon-blue text-sm font-mono tracking-widest uppercase">Resume</span>
+                        <span className="text-neon-blue text-sm font-mono tracking-widest uppercase">Career Profile</span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-neon-blue" />
                     </div>
-                    <h2 className="section-title gradient-text">My Resume</h2>
+                    <h2 className="section-title gradient-text">Resume &amp; Qualifications</h2>
                 </motion.div>
 
                 {/* Summary Cards */}
@@ -74,19 +74,19 @@ export default function Resume() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.6, delay: i * 0.12 }}
-                                className={`glass rounded-2xl p-6 border ${c.border} card-hover`}
+                                className={`glass rounded-2xl p-6 border ${c.border} card-hover flex flex-col`}
                             >
                                 <div className={`w-10 h-10 rounded-xl ${c.bg} border ${c.border} flex items-center justify-center mb-5`}>
                                     <section.icon className={`text-xl ${c.icon}`} />
                                 </div>
                                 <h3 className={`text-lg font-bold ${c.icon} mb-4`}>{section.title}</h3>
-                                <ul className="space-y-3">
+                                <ul className="space-y-3 mt-auto">
                                     {section.items.map((item) => (
                                         <li key={item.label} className="flex items-start gap-2.5">
                                             <span className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${c.dot}`} />
                                             <div>
                                                 <p className="text-sm font-semibold text-white">{item.label}</p>
-                                                <p className="text-xs text-slate-500">{item.desc}</p>
+                                                <p className="text-xs text-slate-400">{item.desc}</p>
                                             </div>
                                         </li>
                                     ))}
@@ -96,13 +96,13 @@ export default function Resume() {
                     })}
                 </div>
 
-                {/* Download CTA */}
+                {/* Recruiter-focused CTA */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.7, delay: 0.3 }}
-                    className="glass rounded-2xl p-10 border border-neon-blue/20 text-center"
+                    className="glass rounded-2xl p-8 sm:p-12 border border-neon-blue/20 text-center"
                 >
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="h-px w-24 bg-gradient-to-r from-transparent to-neon-blue/50" />
@@ -111,21 +111,31 @@ export default function Resume() {
                         </div>
                         <div className="h-px w-24 bg-gradient-to-l from-transparent to-neon-blue/50" />
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">Download Full Resume</h3>
-                    <p className="text-slate-400 text-sm mb-8 max-w-md mx-auto">
-                        Get the complete resume in PDF format with all projects, skills, and contact details.
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">Interested in working together?</h3>
+                    <p className="text-slate-300 text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed">
+                        I'm currently exploring <span className="text-neon-cyan font-semibold">Junior Full-Stack Developer</span> opportunities to contribute to real-world software projects and grow as a full-stack developer.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <div className="flex flex-wrap gap-4 justify-center">
                         <motion.a
                             href="/Resume%201st%20year.pdf"
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.97 }}
-                            className="flex items-center justify-center gap-2 px-8 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl hover:shadow-neon-blue-lg transition-all duration-300"
+                            className="flex items-center justify-center gap-2 px-7 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl shadow-neon-blue transition-all duration-300"
                         >
                             <HiDownload className="text-xl" />
-                            View / Download PDF
+                            View Resume
+                        </motion.a>
+                        <motion.a
+                            href="/Resume%201st%20year.pdf"
+                            download
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="flex items-center justify-center gap-2 px-7 py-3.5 border border-neon-cyan/60 text-neon-cyan font-bold rounded-xl hover:bg-neon-cyan/10 transition-all duration-300"
+                        >
+                            <HiDownload className="text-xl" />
+                            Download Resume
                         </motion.a>
                         <motion.a
                             href="https://github.com/karmjitsg09"
@@ -133,7 +143,7 @@ export default function Resume() {
                             rel="noopener noreferrer"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.97 }}
-                            className="flex items-center justify-center gap-2 px-8 py-3.5 border border-neon-blue/60 text-neon-blue font-bold rounded-xl hover:bg-neon-blue/10 transition-all duration-300"
+                            className="flex items-center justify-center gap-2 px-7 py-3.5 border border-white/20 text-slate-200 font-bold rounded-xl hover:bg-white/5 transition-all duration-300"
                         >
                             <FaGithub className="text-xl" />
                             View GitHub

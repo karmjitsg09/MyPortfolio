@@ -1,49 +1,76 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-    SiPython, SiJavascript, SiCplusplus, SiHtml5, SiCss, SiReact,
-    SiGit, SiGithub, SiLinux,
+    SiPython, SiJavascript, SiTypescript, SiHtml5, SiCss, SiReact,
+    SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress,
+    SiPostgresql, SiSupabase, SiFirebase, SiSqlite,
+    SiTensorflow, SiGooglegemini, SiFastapi,
+    SiGit, SiGithub, SiVercel, SiRender, SiReplit, SiLinux, SiN8N
 } from 'react-icons/si';
-import { FaJava, FaRobot, FaBolt, FaGamepad, FaCode } from 'react-icons/fa';
+import { FaServer, FaDatabase, FaBrain, FaTools, FaCode } from 'react-icons/fa';
 
 const skillGroups = [
     {
-        category: 'Programming',
-        color: 'blue',
-        skills: [
-            { name: 'Python', icon: SiPython, color: '#3b82f6' },
-            { name: 'JavaScript', icon: SiJavascript, color: '#facc15' },
-            { name: 'Java', icon: FaJava, color: '#f97316' },
-            { name: 'C++', icon: SiCplusplus, color: '#818cf8' },
-        ],
-    },
-    {
-        category: 'Front-end Web Development',
+        category: 'Frontend Development',
         color: 'purple',
+        icon: FaCode,
         skills: [
             { name: 'HTML5', icon: SiHtml5, color: '#f97316' },
             { name: 'CSS3', icon: SiCss, color: '#38bdf8' },
-            { name: 'JavaScript', icon: SiJavascript, color: '#facc15' },
-            { name: 'React', icon: SiReact, color: '#61dafb' },
+            { name: 'JavaScript (ES6+)', icon: SiJavascript, color: '#facc15' },
+            { name: 'TypeScript', icon: SiTypescript, color: '#3178c6' },
+            { name: 'React.js', icon: SiReact, color: '#61dafb' },
+            { name: 'Next.js', icon: SiNextdotjs, color: '#ffffff' },
+            { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#38bdf8' },
         ],
     },
     {
-        category: 'Tools & Platforms',
+        category: 'Backend & APIs',
+        color: 'blue',
+        icon: FaServer,
+        skills: [
+            { name: 'Node.js', icon: SiNodedotjs, color: '#22c55e' },
+            { name: 'Express.js', icon: SiExpress, color: '#e2e8f0' },
+            { name: 'REST APIs', icon: FaServer, color: '#00d4ff' },
+            { name: 'Python', icon: SiPython, color: '#38bdf8' },
+            { name: 'FastAPI', icon: SiFastapi, color: '#009688' },
+        ],
+    },
+    {
+        category: 'Database & Storage',
         color: 'cyan',
+        icon: FaDatabase,
+        skills: [
+            { name: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
+            { name: 'Supabase', icon: SiSupabase, color: '#3ecf8e' },
+            { name: 'Firebase / Firestore', icon: SiFirebase, color: '#f5820d' },
+            { name: 'SQLite', icon: SiSqlite, color: '#003b57' },
+        ],
+    },
+    {
+        category: 'AI / ML & Integrations',
+        color: 'pink',
+        icon: FaBrain,
+        skills: [
+            { name: 'Python', icon: SiPython, color: '#38bdf8' },
+            { name: 'TensorFlow', icon: SiTensorflow, color: '#ff6f00' },
+            { name: 'Machine Learning', icon: FaBrain, color: '#f472b6' },
+            { name: 'Google Gemini API', icon: SiGooglegemini, color: '#4796e3' },
+            { name: 'Google AI Studio', icon: SiGooglegemini, color: '#00d4ff' },
+        ],
+    },
+    {
+        category: 'Tools & Deployment',
+        color: 'green',
+        icon: FaTools,
         skills: [
             { name: 'Git', icon: SiGit, color: '#f97316' },
             { name: 'GitHub', icon: SiGithub, color: '#e2e8f0' },
+            { name: 'Vercel', icon: SiVercel, color: '#ffffff' },
+            { name: 'Render', icon: SiRender, color: '#46e3b7' },
+            { name: 'Replit', icon: SiReplit, color: '#f26207' },
+            { name: 'n8n Automation', icon: SiN8N, color: '#ff6d5a' },
             { name: 'Linux Terminal', icon: SiLinux, color: '#fbbf24' },
-        ],
-    },
-    {
-        category: 'Other Expertise',
-        color: 'pink',
-        skills: [
-            { name: 'AI & Prompt Engineering', icon: FaRobot, color: '#00d4ff' },
-            { name: 'Automation', icon: FaBolt, color: '#a78bfa' },
-            { name: '2D Game Development', icon: FaGamepad, color: '#34d399' },
-            { name: 'App & Logic Development', icon: FaCode, color: '#f472b6' },
         ],
     },
 ];
@@ -53,6 +80,7 @@ const colorMap = {
     purple: { border: 'border-neon-purple/30', glow: 'hover:shadow-neon-purple', tag: 'text-neon-purple', bg: 'bg-neon-purple/5', title: 'neon-text-purple' },
     cyan: { border: 'border-neon-cyan/30', glow: 'hover:shadow-neon-cyan', tag: 'text-neon-cyan', bg: 'bg-neon-cyan/5', title: 'neon-text-cyan' },
     pink: { border: 'border-pink-500/30', glow: 'hover:shadow-pink-500/30', tag: 'text-pink-400', bg: 'bg-pink-500/5', title: 'text-pink-400' },
+    green: { border: 'border-emerald-500/30', glow: 'hover:shadow-emerald-500/30', tag: 'text-emerald-400', bg: 'bg-emerald-500/5', title: 'text-emerald-400' },
 };
 
 export default function Skills() {
@@ -71,42 +99,46 @@ export default function Skills() {
                 >
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-purple" />
-                        <span className="text-neon-purple text-sm font-mono tracking-widest uppercase">Tech Arsenal</span>
+                        <span className="text-neon-purple text-sm font-mono tracking-widest uppercase">Technical Stack</span>
                         <div className="h-px w-12 bg-gradient-to-l from-transparent to-neon-purple" />
                     </div>
-                    <h2 className="section-title gradient-text">Skills &amp; Tools</h2>
+                    <h2 className="section-title gradient-text">Skills &amp; Technologies</h2>
+                    <p className="text-slate-400 text-sm max-w-xl mx-auto mt-3">
+                        Technologies I use for building full-stack web applications, database systems, and AI-enabled software.
+                    </p>
                 </motion.div>
 
                 {/* Skill Groups */}
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {skillGroups.map((group, gi) => {
                         const c = colorMap[group.color];
+                        const GroupIcon = group.icon;
                         return (
                             <motion.div
                                 key={group.category}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, amount: 0.3 }}
+                                viewport={{ once: true, amount: 0.2 }}
                                 transition={{ duration: 0.6, delay: gi * 0.1 }}
-                                className={`glass rounded-2xl p-6 border ${c.border} hover:scale-[1.02] transition-all duration-300 ${c.glow}`}
+                                className={`glass rounded-2xl p-6 border ${c.border} hover:scale-[1.02] transition-all duration-300 ${c.glow} flex flex-col`}
                             >
-                                <h3 className={`text-lg font-bold mb-5 ${c.title} flex items-center gap-2`}>
-                                    <span className={`w-2 h-2 rounded-full ${c.bg} border ${c.border} inline-block`} />
+                                <h3 className={`text-base font-bold mb-4 ${c.title} flex items-center gap-2`}>
+                                    <GroupIcon className="text-base" />
                                     {group.category}
                                 </h3>
-                                <div className="flex flex-wrap gap-3">
+                                <div className="flex flex-wrap gap-2.5 mt-auto">
                                     {group.skills.map((skill, si) => (
                                         <motion.div
                                             key={skill.name}
                                             initial={{ opacity: 0, scale: 0.8 }}
                                             whileInView={{ opacity: 1, scale: 1 }}
                                             viewport={{ once: true }}
-                                            transition={{ duration: 0.4, delay: gi * 0.1 + si * 0.07 }}
-                                            whileHover={{ scale: 1.1, y: -4 }}
-                                            className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl ${c.bg} border ${c.border} cursor-default transition-all duration-200 hover:${c.border.replace('/30', '/60')}`}
+                                            transition={{ duration: 0.3, delay: gi * 0.08 + si * 0.04 }}
+                                            whileHover={{ scale: 1.06, y: -2 }}
+                                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${c.bg} border ${c.border} cursor-default transition-all duration-200`}
                                         >
-                                            <skill.icon style={{ color: skill.color }} className="text-lg flex-shrink-0" />
-                                            <span className="text-sm font-medium text-slate-300">{skill.name}</span>
+                                            <skill.icon style={{ color: skill.color }} className="text-base flex-shrink-0" />
+                                            <span className="text-xs font-medium text-slate-300">{skill.name}</span>
                                         </motion.div>
                                     ))}
                                 </div>
@@ -115,41 +147,30 @@ export default function Skills() {
                     })}
                 </div>
 
-                {/* Proficiency bars */}
+                {/* Recruiter-friendly Technology Summary Banner */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="mt-12 glass rounded-2xl p-8 border border-neon-blue/10"
+                    className="mt-10 glass rounded-2xl p-6 border border-neon-blue/20 flex flex-col md:flex-row items-center justify-between gap-6"
                 >
-                    <h3 className="text-lg font-bold neon-text-blue mb-6">Proficiency Levels</h3>
-                    <div className="space-y-5">
-                        {[
-                            { name: 'Python', level: 75, color: '#3b82f6' },
-                            { name: 'JavaScript', level: 65, color: '#facc15' },
-                            { name: 'HTML & CSS', level: 80, color: '#f97316' },
-                            { name: 'AI Tools & Prompt Engineering', level: 85, color: '#00d4ff' },
-                            { name: 'Git & GitHub', level: 70, color: '#e2e8f0' },
-                            { name: 'React', level: 65, color: '#61dafb' },
-                            { name: 'Java / C++', level: 85, color: '#818cf8' },
-                        ].map((item, i) => (
-                            <div key={item.name}>
-                                <div className="flex justify-between text-sm mb-2">
-                                    <span className="text-slate-300 font-medium">{item.name}</span>
-                                    <span className="text-slate-500 font-mono">{item.level}%</span>
-                                </div>
-                                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        whileInView={{ width: `${item.level}%` }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
-                                        className="h-full rounded-full"
-                                        style={{ background: `linear-gradient(90deg, ${item.color}99, ${item.color})` }}
-                                    />
-                                </div>
-                            </div>
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center text-dark font-black text-xl flex-shrink-0">
+                            ⚡
+                        </div>
+                        <div>
+                            <h4 className="text-base font-bold text-white">Production Stack Snapshot</h4>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                                Primary focus: React / Next.js, Node.js / Express, PostgreSQL / Supabase, and AI API integrations.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 justify-end">
+                        {['TypeScript', 'React.js', 'Next.js', 'Node.js', 'PostgreSQL', 'Python', 'Gemini AI', 'Vercel'].map((t) => (
+                            <span key={t} className="px-3 py-1 text-xs font-mono font-semibold rounded-md bg-neon-blue/10 text-neon-blue border border-neon-blue/30">
+                                {t}
+                            </span>
                         ))}
                     </div>
                 </motion.div>

@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
 import ParticleBackground from './ParticleBackground';
+import { projects } from './Projects';
 
 const roles = [
-    'B.Tech Student',
-    'Software Developer',
-    'AI Enthusiast',
+    'Full-Stack Developer',
+    'AI/ML Student',
+    'Product Builder',
     'Open Source Contributor',
 ];
 
@@ -149,6 +150,28 @@ function ProfileImage() {
     );
 }
 
+class CanvasErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-48 h-48 rounded-full bg-gradient-to-br from-neon-blue/20 to-neon-purple/20 border border-neon-blue/30 flex items-center justify-center animate-pulse">
+                        <span className="text-neon-cyan font-mono text-xs">&lt;full-stack /&gt;</span>
+                    </div>
+                </div>
+            );
+        }
+        return this.props.children;
+    }
+}
+
 export default function Hero() {
     return (
         <section id="hero" className="relative min-h-screen flex items-center overflow-hidden grid-bg">
@@ -175,7 +198,9 @@ export default function Hero() {
                         {/* Badge */}
                         <div className="flex items-center gap-3 mb-6">
                             <div className="h-px w-12 bg-neon-blue" />
-                            <span className="text-neon-blue text-sm font-mono tracking-widest uppercase">Developer Portfolio</span>
+                            <span className="text-neon-blue text-xs sm:text-sm font-mono tracking-widest uppercase">
+                                2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer
+                            </span>
                         </div>
 
                         {/* ── Profile photo + Name on one line ── */}
@@ -196,52 +221,73 @@ export default function Hero() {
                                         SG
                                     </span>
                                 </h1>
+                                <p className="text-sm sm:text-base text-neon-blue font-mono font-medium mt-1">
+                                    Full-Stack Developer &amp; AI/ML Student
+                                </p>
                             </div>
                         </div>
 
                         {/* Typewriter role */}
-                        <h2 className="text-xl sm:text-2xl font-medium text-slate-400 mb-3 h-9">
+                        <h2 className="text-xl sm:text-2xl font-medium text-slate-300 mb-3 h-9">
                             <TypewriterText texts={roles} />
                         </h2>
 
-                        <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-lg mb-10">
-                            Building intelligent software and experimenting with{' '}
-                            <span className="neon-text-cyan font-medium">AI-powered systems</span>.
-                            First-year B.Tech student passionate about open-source and automation.
+                        <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mb-8">
+                            I build <span className="text-white font-semibold">full-stack web applications</span>,{' '}
+                            <span className="neon-text-cyan font-medium">AI-powered products</span>, and practical digital experiences using modern web technologies.
                         </p>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-wrap gap-4">
+                        {/* Hero CTAs */}
+                        <div className="flex flex-wrap gap-3 sm:gap-4 mb-8">
                             <motion.button
                                 onClick={() => scrollTo('projects')}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-7 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl transition-all duration-300"
-                                style={{ boxShadow: '0 0 30px rgba(0,212,255,0.3)' }}
+                                className="flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-dark font-bold rounded-xl transition-all duration-300 cursor-pointer shadow-neon-blue"
                             >
                                 ⚡ View Projects
                             </motion.button>
                             <motion.a
-                                href="/Resume%201st%20year.pdf"
-                                download
+                                href="https://github.com/karmjitsg09"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.97 }}
-                                className="flex items-center gap-2 px-7 py-3.5 border border-neon-blue text-neon-blue font-bold rounded-xl hover:bg-neon-blue/10 transition-all duration-300"
+                                className="flex items-center gap-2 px-6 py-3.5 border border-white/20 bg-white/5 text-white font-bold rounded-xl hover:border-neon-cyan hover:text-neon-cyan transition-all duration-300"
                             >
-                                ↓ Download Resume
+                                GitHub
+                            </motion.a>
+                            <motion.button
+                                onClick={() => scrollTo('contact')}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex items-center gap-2 px-6 py-3.5 border border-neon-blue text-neon-blue font-bold rounded-xl hover:bg-neon-blue/10 transition-all duration-300 cursor-pointer"
+                            >
+                                Contact Me
+                            </motion.button>
+                            <motion.a
+                                href="/Resume%201st%20year.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.97 }}
+                                className="flex items-center gap-2 px-6 py-3.5 border border-neon-purple text-neon-purple font-bold rounded-xl hover:bg-neon-purple/10 transition-all duration-300"
+                            >
+                                Resume ↗
                             </motion.a>
                         </div>
 
                         {/* Stats */}
-                        <div className="flex gap-8 mt-12 pt-8 border-t border-white/5">
+                        <div className="flex flex-wrap gap-6 sm:gap-10 pt-6 border-t border-white/10">
                             {[
-                                { value: '3+', label: 'Projects' },
-                                { value: 'Mathesar', label: 'Open Source' },
-                                { value: 'AI & Dev', label: 'Expertise' },
+                                { value: projects.length, label: 'Full-Stack & AI Projects' },
+                                { value: 'Deployed', label: 'Real-World Apps' },
+                                { value: 'Hackathons', label: 'Replit × Polaris' },
+                                { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },
                             ].map((stat) => (
                                 <div key={stat.label}>
-                                    <div className="text-2xl font-bold neon-text-blue">{stat.value}</div>
-                                    <div className="text-xs text-slate-500 mt-0.5">{stat.label}</div>
+                                    <div className="text-xl sm:text-2xl font-bold neon-text-blue">{stat.value}</div>
+                                    <div className="text-xs text-slate-400 mt-0.5">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -255,18 +301,20 @@ export default function Hero() {
                     transition={{ duration: 1, delay: 0.4 }}
                     className="h-[420px] sm:h-[500px] lg:h-[560px] relative"
                 >
-                    <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-                        <ambientLight intensity={0.5} />
-                        <pointLight position={[10, 10, 10]} color="#00d4ff" intensity={2} />
-                        <pointLight position={[-10, -10, -10]} color="#b400ff" intensity={1.5} />
-                        <pointLight position={[0, 5, -5]} color="#00ffea" intensity={1} />
-                        <Suspense fallback={null}>
-                            <AnimatedSphere />
-                            <AnimatedTorus radius={2} tube={0.06} color="#b400ff" speed={0.5} />
-                            <AnimatedTorus radius={2.8} tube={0.04} color="#00ffea" speed={-0.3} />
-                        </Suspense>
-                        <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.8} />
-                    </Canvas>
+                    <CanvasErrorBoundary>
+                        <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+                            <ambientLight intensity={0.5} />
+                            <pointLight position={[10, 10, 10]} color="#00d4ff" intensity={2} />
+                            <pointLight position={[-10, -10, -10]} color="#b400ff" intensity={1.5} />
+                            <pointLight position={[0, 5, -5]} color="#00ffea" intensity={1} />
+                            <Suspense fallback={null}>
+                                <AnimatedSphere />
+                                <AnimatedTorus radius={2} tube={0.06} color="#b400ff" speed={0.5} />
+                                <AnimatedTorus radius={2.8} tube={0.04} color="#00ffea" speed={-0.3} />
+                            </Suspense>
+                            <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.8} />
+                        </Canvas>
+                    </CanvasErrorBoundary>
 
                     {/* Holographic labels */}
                     <div className="absolute top-8 right-8 glass px-3 py-2 rounded-lg animate-float text-xs font-mono neon-text-blue">

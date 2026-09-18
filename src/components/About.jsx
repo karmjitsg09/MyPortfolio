@@ -66,28 +66,28 @@ export default function About() {
                                 </div>
                                 <div>
                                     <h3 className="text-2xl font-bold text-white">Karmjit SG</h3>
-                                    <p className="text-neon-cyan text-sm font-mono mt-0.5">B.Tech Student @ Yenepoya University</p>
-                                    <p className="text-slate-500 text-xs mt-0.5">Kalvium Program • Hosur, Tamilnadu</p>
+                                    <p className="text-neon-cyan text-sm font-mono mt-0.5">2nd-Year B.Tech CSE (AI &amp; ML)</p>
+                                    <p className="text-slate-400 text-xs mt-0.5">Yenepoya University (Kalvium) • Full-Stack Developer</p>
                                 </div>
                             </div>
 
-                            <p className="text-slate-300 leading-relaxed text-base mb-6">
-                                I am a <span className="neon-text-blue font-semibold">first-year B.Tech student</span> at Yenepoya University (Kalvium) with hands-on experience in application development, AI-assisted workflows, open-source collaboration, and real-world problem solving.
+                            <p className="text-slate-300 leading-relaxed text-base mb-5">
+                                I am a <span className="neon-text-blue font-semibold">2nd-year B.Tech Computer Science and Engineering (AI &amp; ML)</span> student at Yenepoya University (Kalvium Program). I enjoy building real, production-ready web applications and practical tools rather than only experimenting with tutorials.
                             </p>
-                            <p className="text-slate-400 leading-relaxed text-base mb-8">
-                                I enjoy building <span className="neon-text-cyan font-semibold">practical tools</span>, experimenting with automation, and contributing to open-source communities. My goal is to bridge the gap between intelligent software and everyday usability.
+                            <p className="text-slate-300 leading-relaxed text-base mb-6">
+                                My core focus spans <span className="neon-text-cyan font-semibold">Full-Stack Web Development</span>, <span className="text-neon-purple font-semibold">AI/ML Integrations</span>, developer tools, product development, and automation. I have practical experience building and deploying projects using modern frontend, backend, database, and cloud platforms.
                             </p>
 
                             {/* Quick facts */}
                             <div className="grid grid-cols-2 gap-4">
                                 {[
-                                    { label: 'University', value: 'Yenepoya (Kalvium)' },
-                                    { label: 'Year', value: 'First Year B.Tech' },
-                                    { label: 'Location', value: 'Hosur, Tamilnadu' },
-                                    { label: 'Focus', value: 'Software & AI' },
+                                    { label: 'Role Focus', value: 'Junior Full-Stack Dev' },
+                                    { label: 'Education', value: '2nd Year B.Tech CSE (AI/ML)' },
+                                    { label: 'Institution', value: 'Yenepoya (Kalvium)' },
+                                    { label: 'Core Stack', value: 'React, Node, TypeScript, SQL' },
                                 ].map((fact) => (
-                                    <div key={fact.label} className="bg-white/5 rounded-xl px-4 py-3">
-                                        <p className="text-xs text-slate-500 mb-0.5">{fact.label}</p>
+                                    <div key={fact.label} className="bg-white/5 rounded-xl px-4 py-3 border border-white/5">
+                                        <p className="text-xs text-slate-400 mb-0.5">{fact.label}</p>
                                         <p className="text-sm font-semibold text-white">{fact.value}</p>
                                     </div>
                                 ))}
@@ -119,21 +119,21 @@ export default function About() {
                                             item.color === 'neon-purple' ? 'text-neon-purple' : 'text-neon-cyan'
                                         }`}
                                 />
-                                <span className="text-xs text-slate-500 text-center leading-tight">{item.label}</span>
+                                <span className="text-xs text-slate-400 text-center leading-tight">{item.label}</span>
                             </motion.div>
                         ))}
 
-                        {/* Extra highlight card */}
+                        {/* Extra highlight card: Areas of Interest */}
                         <div className="col-span-4 mt-4">
                             <div className="glass rounded-2xl p-5 border border-neon-purple/20">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="w-2 h-2 rounded-full bg-neon-cyan animate-pulse" />
-                                    <span className="text-xs text-slate-400 font-mono">languages & languages.human[]</span>
+                                    <span className="text-xs text-slate-400 font-mono">areas_of_interest[]</span>
                                 </div>
-                                <div className="flex gap-3 flex-wrap">
-                                    {['English', 'Tamil'].map((lang) => (
-                                        <span key={lang} className="px-3 py-1.5 text-sm font-medium text-neon-blue bg-neon-blue/10 rounded-lg border border-neon-blue/20">
-                                            {lang}
+                                <div className="flex gap-2 flex-wrap">
+                                    {['Full-Stack Development', 'AI & ML Systems', 'Developer Tools', 'Product Engineering', 'Workflow Automation', 'Open Source'].map((interest) => (
+                                        <span key={interest} className="px-3 py-1 text-xs font-medium text-neon-blue bg-neon-blue/10 rounded-lg border border-neon-blue/20">
+                                            {interest}
                                         </span>
                                     ))}
                                 </div>

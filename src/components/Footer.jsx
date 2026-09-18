@@ -7,6 +7,8 @@ const navItems = [
     { label: 'About', id: 'about' },
     { label: 'Skills', id: 'skills' },
     { label: 'Projects', id: 'projects' },
+    { label: 'Journey', id: 'journey' },
+    { label: 'Hackathons', id: 'hackathons' },
     { label: 'Open Source', id: 'opensource' },
     { label: 'Resume', id: 'resume' },
     { label: 'Contact', id: 'contact' },
@@ -38,7 +40,7 @@ export default function Footer() {
                             </div>
                             <span className="gradient-text font-bold text-lg">Karmjit SG</span>
                         </div>
-                        <p className="text-xs text-slate-600">B.Tech Student | Software &amp; AI Enthusiast</p>
+                        <p className="text-xs text-slate-500 font-mono">2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer</p>
                     </div>
 
                     {/* Nav */}
