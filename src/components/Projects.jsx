@@ -54,6 +54,7 @@ import {
     LuSearch,
     LuFilter,
 } from 'react-icons/lu';
+import TiltCard from './TiltCard';
 
 /* ─────────────────────────────────────────
    1. FEATURED PROJECTS (9 Primary Apps)
@@ -700,6 +701,10 @@ function ProjectShowcaseCard({ project, index }) {
         const height = rect.height;
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
+
+        cardRef.current.style.setProperty('--mouse-x', `${mouseX}px`);
+        cardRef.current.style.setProperty('--mouse-y', `${mouseY}px`);
+
         x.set(mouseX / width - 0.5);
         y.set(mouseY / height - 0.5);
     };
@@ -718,25 +723,34 @@ function ProjectShowcaseCard({ project, index }) {
                 rotateX,
                 rotateY,
                 transformStyle: 'preserve-3d',
-                boxShadow: `0 10px 40px -10px ${project.glow}`,
+                boxShadow: `0 12px 45px -10px ${project.glow}`,
             }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            whileHover={{ y: -4 }}
-            className={`relative glass rounded-3xl border ${project.border} overflow-hidden transition-all duration-300`}
+            whileHover={{ y: -8, scale: 1.012 }}
+            className={`group relative glass rounded-3xl border ${project.border} overflow-hidden transition-all duration-300`}
         >
             {/* Top Tri-colour Accent Bar */}
             <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.accent} z-20`} />
+
+            {/* Dynamic Cursor-Following Radial Spotlight */}
+            <div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+                style={{
+                    background: `radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 212, 255, 0.12), transparent 80%)`,
+                }}
+            />
 
             {/* Split Grid: 50% Content / 50% Visual */}
             <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[500px]">
                 {/* ── CONTENT PANEL ── */}
                 <div
+                    style={{ transform: 'translateZ(15px)' }}
                     className={`p-7 sm:p-9 lg:p-11 flex flex-col justify-between ${
                         isEven ? 'lg:order-1' : 'lg:order-2'
-                    } order-1`}
+                    } order-1 z-20`}
                 >
                     <div>
                         {/* Header: Category + Order Number */}
@@ -896,13 +910,15 @@ function AdditionalProjectCard({ project }) {
     const IconComponent = project.icon;
 
     return (
-        <motion.div
-            layout
+        <TiltCard
+            maxTilt={4}
+            lift={6}
+            scale={1.02}
+            glowColor="rgba(0, 255, 234, 0.12)"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.4 }}
-            whileHover={{ y: -4 }}
             className="group relative glass rounded-2xl p-6 sm:p-7 border border-white/10 hover:border-neon-cyan/40 transition-all duration-300 flex flex-col justify-between overflow-hidden"
             style={{
                 boxShadow: '0 4px 20px -5px rgba(0,0,0,0.5)',
@@ -968,7 +984,7 @@ function AdditionalProjectCard({ project }) {
                     ) : null}
                 </div>
             </div>
-        </motion.div>
+        </TiltCard>
     );
 }
 

@@ -6,6 +6,7 @@ import {
 } from 'react-icons/si';
 import { FaGraduationCap, FaCodeBranch, FaCheckCircle, FaLaptopCode, FaUsers } from 'react-icons/fa';
 import { HiSparkles, HiAcademicCap } from 'react-icons/hi';
+import TiltCard from './TiltCard';
 
 const learningProgression = [
     {
@@ -82,13 +83,17 @@ export default function KalviLearn() {
                 {/* Progression Flow Narrative */}
                 <div className="grid md:grid-cols-5 gap-4 mb-12">
                     {learningProgression.map((item, index) => (
-                        <motion.div
+                        <TiltCard
                             key={item.stage}
+                            maxTilt={4}
+                            lift={6}
+                            scale={1.02}
+                            glowColor={`${item.color}25`}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, amount: 0.2 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="glass rounded-2xl p-5 border border-white/10 hover:border-neon-cyan/40 transition-all duration-300 flex flex-col justify-between group"
+                            className="glass rounded-2xl p-5 border border-white/10 hover:border-neon-cyan/40 transition-all duration-300 flex flex-col justify-between"
                         >
                             <div>
                                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -124,7 +129,7 @@ export default function KalviLearn() {
                                     ))}
                                 </div>
                             </div>
-                        </motion.div>
+                        </TiltCard>
                     ))}
                 </div>
 

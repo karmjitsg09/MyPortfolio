@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { HiDownload, HiAcademicCap, HiBriefcase, HiCode } from 'react-icons/hi';
 import { FaGithub } from 'react-icons/fa';
+import TiltCard from './TiltCard';
 
 const resumeHighlights = [
     {
@@ -64,17 +65,21 @@ export default function Resume() {
                 </motion.div>
 
                 {/* Summary Cards */}
-                <div className="grid md:grid-cols-3 gap-6 mb-12">
+                <div className="grid md:grid-cols-3 gap-6 mb-16">
                     {resumeHighlights.map((section, i) => {
                         const c = colorMap[section.color];
                         return (
-                            <motion.div
+                            <TiltCard
                                 key={section.title}
+                                maxTilt={4}
+                                lift={6}
+                                scale={1.02}
+                                glowColor={section.color === 'purple' ? 'rgba(180, 0, 255, 0.15)' : section.color === 'cyan' ? 'rgba(0, 255, 234, 0.15)' : 'rgba(0, 212, 255, 0.15)'}
                                 initial={{ opacity: 0, y: 40 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.6, delay: i * 0.12 }}
-                                className={`glass rounded-2xl p-6 border ${c.border} card-hover flex flex-col`}
+                                className={`glass rounded-2xl p-6 border ${c.border} flex flex-col`}
                             >
                                 <div className={`w-10 h-10 rounded-xl ${c.bg} border ${c.border} flex items-center justify-center mb-5`}>
                                     <section.icon className={`text-xl ${c.icon}`} />
@@ -91,7 +96,7 @@ export default function Resume() {
                                         </li>
                                     ))}
                                 </ul>
-                            </motion.div>
+                            </TiltCard>
                         );
                     })}
                 </div>

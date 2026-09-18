@@ -4,6 +4,7 @@ import { FaCode, FaBrain, FaGithub, FaTerminal, FaRocket, FaLaptopCode } from 'r
 import { SiOpenai } from 'react-icons/si';
 import { HiLightningBolt } from 'react-icons/hi';
 import { LuSparkles, LuGraduationCap } from 'react-icons/lu';
+import TiltCard from './TiltCard';
 
 const floatingIcons = [
     { icon: FaCode, color: 'neon-blue', label: 'Code', delay: '0s' },
@@ -53,7 +54,13 @@ export default function About() {
                         viewport={{ once: true, amount: 0.3 }}
                         transition={{ duration: 0.7 }}
                     >
-                        <div className="glass rounded-3xl p-7 sm:p-9 border border-neon-blue/20 shadow-2xl relative overflow-hidden group">
+                        <TiltCard
+                            maxTilt={3}
+                            lift={6}
+                            scale={1.01}
+                            glowColor="rgba(0, 212, 255, 0.15)"
+                            className="glass rounded-3xl p-7 sm:p-9 border border-neon-blue/20 shadow-2xl relative"
+                        >
                             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-neon-blue via-neon-purple to-neon-cyan" />
 
                             {/* Profile picture & Name banner */}
@@ -94,7 +101,7 @@ export default function About() {
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </TiltCard>
                     </motion.div>
 
                     {/* Right – Interactive Floating Icon Grid */}

@@ -9,6 +9,7 @@ import {
 } from 'react-icons/si';
 import { FaServer, FaDatabase, FaBrain, FaTools, FaCode } from 'react-icons/fa';
 import { LuNetwork, LuSparkles } from 'react-icons/lu';
+import TiltCard from './TiltCard';
 
 const skillGroups = [
     {
@@ -198,15 +199,25 @@ export default function Skills() {
                             const c = colorMap[group.color];
                             const GroupIcon = group.icon;
                             return (
-                                <motion.div
-                                    layout
+                                <TiltCard
                                     key={group.category}
+                                    maxTilt={3.5}
+                                    lift={7}
+                                    scale={1.015}
+                                    glowColor={
+                                        group.color === 'purple'
+                                            ? 'rgba(180, 0, 255, 0.15)'
+                                            : group.color === 'cyan'
+                                            ? 'rgba(0, 255, 234, 0.15)'
+                                            : group.color === 'pink'
+                                            ? 'rgba(244, 63, 94, 0.15)'
+                                            : 'rgba(0, 212, 255, 0.15)'
+                                    }
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, amount: 0.2 }}
                                     transition={{ duration: 0.5, delay: gi * 0.08 }}
-                                    whileHover={{ y: -4 }}
-                                    className={`glass rounded-2xl p-6 border ${c.border} transition-all duration-300 ${c.glow} flex flex-col justify-between group relative overflow-hidden`}
+                                    className={`glass rounded-2xl p-6 border ${c.border} transition-all duration-300 ${c.glow} flex flex-col justify-between`}
                                 >
                                     <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -243,7 +254,7 @@ export default function Skills() {
                                             </motion.div>
                                         ))}
                                     </div>
-                                </motion.div>
+                                </TiltCard>
                             );
                         })}
                 </div>

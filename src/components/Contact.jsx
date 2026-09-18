@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaPhone, FaEnvelope, FaPaperPlane, FaTerminal } from 'react-icons/fa';
 import { HiExternalLink } from 'react-icons/hi';
 import { LuSparkles, LuCheck, LuCopy } from 'react-icons/lu';
+import TiltCard from './TiltCard';
 
 const contacts = [
     { icon: FaPhone, label: 'Phone', value: '+91 9894519018', href: 'tel:+919894519018', color: 'blue' },
@@ -74,7 +75,13 @@ export default function Contact() {
                         className="space-y-6"
                     >
                         {/* Terminal UI Card */}
-                        <div className="glass-strong rounded-3xl p-6 border border-white/15 shadow-2xl relative overflow-hidden">
+                        <TiltCard
+                            maxTilt={3}
+                            lift={6}
+                            scale={1.01}
+                            glowColor="rgba(0, 212, 255, 0.12)"
+                            className="glass-strong rounded-3xl p-6 border border-white/15 shadow-2xl relative"
+                        >
                             {/* Window Header */}
                             <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
                                 <div className="flex items-center gap-2">
@@ -117,7 +124,7 @@ export default function Contact() {
                                     </pre>
                                 </div>
                             </div>
-                        </div>
+                        </TiltCard>
 
                         {/* Direct Contact Cards Grid */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

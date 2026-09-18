@@ -5,6 +5,7 @@ import { SiReplit, SiReact, SiPython, SiJavascript, SiFastapi } from 'react-icon
 import { MdOutlineScience, MdLocationOn } from 'react-icons/md';
 import { LuSparkles, LuTrophy, LuFilter } from 'react-icons/lu';
 import { BsShieldCheck } from 'react-icons/bs';
+import TiltCard from './TiltCard';
 
 /* ─────────────────────────────────────────
    HACKATHONS DATA (5 Confirmed Entries)
@@ -198,15 +199,17 @@ export default function Hackathons() {
                         {filteredHackathons.map((hackathon, index) => {
                             const IconComponent = hackathon.icon;
                             return (
-                                <motion.div
-                                    layout
+                                <TiltCard
                                     key={hackathon.id}
+                                    maxTilt={3.5}
+                                    lift={8}
+                                    scale={1.015}
+                                    glowColor={hackathon.isFeaturedLead ? 'rgba(52, 211, 153, 0.2)' : 'rgba(0, 212, 255, 0.15)'}
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, amount: 0.15 }}
                                     transition={{ duration: 0.5, delay: index * 0.08 }}
-                                    whileHover={{ y: -4 }}
-                                    className={`glass rounded-3xl p-7 sm:p-8 border ${hackathon.border} flex flex-col justify-between relative overflow-hidden group shadow-xl ${
+                                    className={`glass rounded-3xl p-7 sm:p-8 border ${hackathon.border} flex flex-col justify-between shadow-xl ${
                                         hackathon.isFeaturedLead ? 'md:col-span-2 bg-gradient-to-br from-emerald-950/20 via-slate-900/60 to-dark' : ''
                                     }`}
                                 >
@@ -305,7 +308,7 @@ export default function Hackathons() {
                                             )}
                                         </div>
                                     </div>
-                                </motion.div>
+                                </TiltCard>
                             );
                         })}
                     </AnimatePresence>
