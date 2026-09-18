@@ -201,51 +201,74 @@ export default function Skills() {
                             return (
                                 <TiltCard
                                     key={group.category}
-                                    maxTilt={3.5}
-                                    lift={7}
+                                    maxTilt={3}
+                                    maxShiftX={6}
+                                    maxShiftY={8}
+                                    lift={6}
                                     scale={1.015}
+                                    shake={true}
                                     glowColor={
                                         group.color === 'purple'
-                                            ? 'rgba(180, 0, 255, 0.15)'
+                                            ? 'rgba(180, 0, 255, 0.18)'
                                             : group.color === 'cyan'
-                                            ? 'rgba(0, 255, 234, 0.15)'
+                                            ? 'rgba(0, 255, 234, 0.18)'
                                             : group.color === 'pink'
-                                            ? 'rgba(244, 63, 94, 0.15)'
-                                            : 'rgba(0, 212, 255, 0.15)'
+                                            ? 'rgba(244, 63, 94, 0.18)'
+                                            : group.color === 'green'
+                                            ? 'rgba(70, 227, 183, 0.18)'
+                                            : 'rgba(0, 212, 255, 0.18)'
                                     }
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, amount: 0.2 }}
                                     transition={{ duration: 0.5, delay: gi * 0.08 }}
-                                    className={`glass rounded-2xl p-6 border ${c.border} transition-all duration-300 ${c.glow} flex flex-col justify-between`}
+                                    className={`glass rounded-2xl p-6 border ${c.border} transition-colors duration-300 ${c.glow} flex flex-col justify-between hover:z-10`}
                                 >
-                                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-neon-cyan/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-20" />
 
                                     <div>
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className={`text-base font-bold ${c.title} flex items-center gap-2`}>
-                                                <GroupIcon className="text-base flex-shrink-0" />
-                                                {group.category}
+                                        <div 
+                                            style={{ transform: 'translateZ(10px)' }}
+                                            className="flex items-center justify-between mb-3.5"
+                                        >
+                                            <h3 className={`text-base font-bold ${c.title} flex items-center gap-2.5`}>
+                                                <div 
+                                                    style={{ transform: 'translateZ(14px)' }}
+                                                    className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:rotate-3 transition-transform duration-200"
+                                                >
+                                                    <GroupIcon className="text-sm flex-shrink-0" />
+                                                </div>
+                                                <span style={{ transform: 'translateZ(8px)' }}>{group.category}</span>
                                             </h3>
-                                            <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${c.badge}`}>
+                                            <span 
+                                                style={{ transform: 'translateZ(10px)' }}
+                                                className={`text-[10px] font-mono px-2.5 py-0.5 rounded-full border ${c.badge} shadow-sm`}
+                                            >
                                                 {group.skills.length} tools
                                             </span>
                                         </div>
-                                        <p className="text-xs text-slate-400 leading-relaxed mb-6">
+                                        <p 
+                                            style={{ transform: 'translateZ(4px)' }}
+                                            className="text-xs text-slate-400 leading-relaxed mb-6"
+                                        >
                                             {group.description}
                                         </p>
                                     </div>
 
-                                    <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
-                                        {group.skills.map((skill) => (
+                                    <div 
+                                        style={{ transform: 'translateZ(6px)' }}
+                                        className="flex flex-wrap gap-2 pt-2 border-t border-white/5"
+                                    >
+                                        {group.skills.map((skill, si) => (
                                             <motion.div
                                                 key={skill.name}
-                                                whileHover={{ scale: 1.08, y: -2 }}
+                                                whileHover={{ scale: 1.06, y: -2 }}
+                                                whileTap={{ scale: 0.96 }}
                                                 onMouseEnter={() => setHoveredSkill(skill.name)}
                                                 onMouseLeave={() => setHoveredSkill(null)}
-                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${c.bg} border ${c.border} cursor-default transition-all duration-200 ${
+                                                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${c.bg} border ${c.border} cursor-pointer transition-all duration-200 ${
                                                     hoveredSkill === skill.name
-                                                        ? 'border-neon-cyan shadow-sm shadow-neon-cyan/30'
+                                                        ? 'border-neon-cyan shadow-md shadow-neon-cyan/25 -translate-y-0.5'
                                                         : ''
                                                 }`}
                                             >
@@ -259,16 +282,26 @@ export default function Skills() {
                         })}
                 </div>
 
-                {/* Recruiter-friendly Technology Summary Banner */}
-                <motion.div
+                {/* Recruiter-friendly Technology Summary Banner (6. Production Stack Snapshot) */}
+                <TiltCard
+                    maxTilt={2.5}
+                    maxShiftX={5}
+                    maxShiftY={6}
+                    lift={6}
+                    scale={1.01}
+                    shake={true}
+                    glowColor="rgba(0, 212, 255, 0.16)"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.7, delay: 0.2 }}
-                    className="mt-10 glass rounded-2xl p-6 sm:p-8 border border-neon-blue/25 flex flex-col lg:flex-row items-center justify-between gap-6"
+                    className="mt-10 glass rounded-2xl p-6 sm:p-8 border border-neon-blue/25 flex flex-col lg:flex-row items-center justify-between gap-6 hover:z-10"
                 >
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-neon-blue via-neon-purple to-neon-cyan flex items-center justify-center text-dark font-black text-xl flex-shrink-0 shadow-lg shadow-neon-blue/20">
+                    <div 
+                        style={{ transform: 'translateZ(12px)' }}
+                        className="flex items-center gap-4"
+                    >
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-neon-blue via-neon-purple to-neon-cyan flex items-center justify-center text-dark font-black text-xl flex-shrink-0 shadow-lg shadow-neon-blue/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                             <LuSparkles className="text-xl text-dark" />
                         </div>
                         <div>
@@ -278,14 +311,22 @@ export default function Skills() {
                             </p>
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-center lg:justify-end">
+                    <div 
+                        style={{ transform: 'translateZ(10px)' }}
+                        className="flex flex-wrap gap-2 justify-center lg:justify-end"
+                    >
                         {['TypeScript', 'React.js', 'Next.js', 'Node.js', 'PostgreSQL', 'Python', 'Gemini AI', 'Vercel'].map((t) => (
-                            <span key={t} className="px-3 py-1 text-xs font-mono font-semibold rounded-lg bg-neon-blue/10 text-neon-cyan border border-neon-blue/30">
+                            <motion.span 
+                                key={t} 
+                                whileHover={{ scale: 1.06, y: -2 }}
+                                whileTap={{ scale: 0.96 }}
+                                className="px-3 py-1 text-xs font-mono font-semibold rounded-lg bg-neon-blue/10 text-neon-cyan border border-neon-blue/30 hover:border-neon-cyan hover:bg-neon-blue/20 cursor-default transition-all shadow-sm"
+                            >
                                 {t}
-                            </span>
+                            </motion.span>
                         ))}
                     </div>
-                </motion.div>
+                </TiltCard>
             </div>
         </section>
     );
