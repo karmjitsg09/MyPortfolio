@@ -685,14 +685,66 @@ function ProjectShowcaseCard({ project, index }) {
     const VisualIcon = project.visual.icon;
 
     const cardRef = useRef(null);
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+    const [isHovered, setIsHovered] = useState(false);
 
-    const mouseXSpring = useSpring(x, { stiffness: 200, damping: 25 });
-    const mouseYSpring = useSpring(y, { stiffness: 200, damping: 25 });
+    // Continuous normalized cursor position (-0.5 to +0.5)
+    const normX = useMotionValue(0);
+    const normY = useMotionValue(0);
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['3deg', '-3deg']);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-3deg', '3deg']);
+    // Micro-shake values
+    const shakeX = useMotionValue(0);
+    const shakeY = useMotionValue(0);
+
+    const springX = useSpring(normX, { stiffness: 230, damping: 22 });
+    const springY = useSpring(normY, { stiffness: 230, damping: 22 });
+
+    // 3D tilt
+    const rotateX = useTransform(springY, [-0.5, 0.5], ['4.5deg', '-4.5deg']);
+    const rotateY = useTransform(springX, [-0.5, 0.5], ['-4.5deg', '4.5deg']);
+
+    // Directional physical displacement
+    const dirX = useTransform(springX, [-0.5, 0.5], [-8, 8]);
+    const dirY = useTransform(springY, [-0.5, 0.5], [-12, -4]); // Lifts strongest at top (-12px)
+
+    // Visual panel counter-parallax (opposite movement for rich 3D depth)
+    const visualParallaxX = useTransform(springX, [-0.5, 0.5], [4, -4]);
+    const visualParallaxY = useTransform(springY, [-0.5, 0.5], [4, -4]);
+
+    const combinedX = useTransform([dirX, shakeX], ([dx, sx]) => (isHovered ? dx + sx : 0));
+    const combinedY = useTransform([dirY, shakeY], ([dy, sy]) => (isHovered ? dy + sy : 0));
+
+    // High-frequency, ultra-subtle magnetic micro-shake (±0.45px)
+    useEffect(() => {
+        if (!isHovered) {
+            shakeX.set(0);
+            shakeY.set(0);
+            return;
+        }
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion || window.innerWidth < 768) return;
+
+        let frameId;
+        let t = 0;
+
+        const loopShake = () => {
+            t += 0.35;
+            const sx = (Math.sin(t * 2.8) * 0.35 + Math.cos(t * 4.2) * 0.22);
+            const sy = (Math.cos(t * 2.4) * 0.35 + Math.sin(t * 3.8) * 0.22);
+
+            shakeX.set(sx);
+            shakeY.set(sy);
+
+            frameId = requestAnimationFrame(loopShake);
+        };
+
+        frameId = requestAnimationFrame(loopShake);
+        return () => {
+            cancelAnimationFrame(frameId);
+            shakeX.set(0);
+            shakeY.set(0);
+        };
+    }, [isHovered, shakeX, shakeY]);
 
     const handleMouseMove = (e) => {
         if (!cardRef.current) return;
@@ -705,21 +757,29 @@ function ProjectShowcaseCard({ project, index }) {
         cardRef.current.style.setProperty('--mouse-x', `${mouseX}px`);
         cardRef.current.style.setProperty('--mouse-y', `${mouseY}px`);
 
-        x.set(mouseX / width - 0.5);
-        y.set(mouseY / height - 0.5);
+        normX.set(mouseX / width - 0.5);
+        normY.set(mouseY / height - 0.5);
+    };
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
     };
 
     const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
+        setIsHovered(false);
+        normX.set(0);
+        normY.set(0);
     };
 
     return (
         <motion.div
             ref={cardRef}
             onMouseMove={handleMouseMove}
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={{
+                x: combinedX,
+                y: combinedY,
                 rotateX,
                 rotateY,
                 transformStyle: 'preserve-3d',
@@ -729,7 +789,7 @@ function ProjectShowcaseCard({ project, index }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            whileHover={{ y: -8, scale: 1.012 }}
+            whileHover={{ scale: 1.018 }}
             className={`group relative glass rounded-3xl border ${project.border} overflow-hidden transition-all duration-300`}
         >
             {/* Top Tri-colour Accent Bar */}
@@ -739,7 +799,7 @@ function ProjectShowcaseCard({ project, index }) {
             <div
                 className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
                 style={{
-                    background: `radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 212, 255, 0.12), transparent 80%)`,
+                    background: `radial-gradient(420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 212, 255, 0.14), transparent 80%)`,
                 }}
             />
 
@@ -837,7 +897,12 @@ function ProjectShowcaseCard({ project, index }) {
                 </div>
 
                 {/* ── RIGHT VISUAL PANEL ── */}
-                <div
+                <motion.div
+                    style={{
+                        x: visualParallaxX,
+                        y: visualParallaxY,
+                        transform: 'translateZ(20px)',
+                    }}
                     className={`relative flex flex-col justify-center items-center p-8 sm:p-10 lg:p-12 bg-gradient-to-br ${project.visual.bgGradient} ${
                         isEven ? 'lg:order-2' : 'lg:order-1'
                     } order-2 min-h-[320px] lg:min-h-[500px] border-t lg:border-t-0 ${
@@ -897,7 +962,7 @@ function ProjectShowcaseCard({ project, index }) {
                             ))}
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </motion.div>
     );

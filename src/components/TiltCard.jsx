@@ -1,24 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 /**
- * TiltCard: High-performance reusable 3D tilt, lift, and cursor glow container
+ * TiltCard: High-Performance Physical Directional Lift & Magnetic Micro-Shake Container
  * 
- * Features:
- * - Direct Framer Motion spring interpolation (0 re-renders on mousemove)
- * - Dynamic cursor-following radial spotlight via CSS variables
- * - Perspective 3D depth with translateZ support for internal layers
- * - Smooth spring-based return on mouse exit
- * - Disabled on touch/mobile and prefers-reduced-motion
+ * CORE BEHAVIOR:
+ * 1. Normalized Cursor Coordinates (-0.5 to +0.5) drive directional displacement (translateX, translateY)
+ *    - TOP-LEFT: Shifts UP + LEFT (translateX: -6px, translateY: -10px)
+ *    - TOP-RIGHT: Shifts UP + RIGHT (translateX: +6px, translateY: -10px)
+ *    - CENTER: Lifts vertically (translateY: -8px)
+ *    - BOTTOM-LEFT / BOTTOM-RIGHT: Shifts diagonally with slight downward offset
+ * 2. 3D Tilt: rotateX / rotateY proportional to cursor vector (capped at maxTilt ~3°-5°)
+ * 3. Magnetic Micro-Shake: Layered subtle high-frequency physical vibration (±0.4px to ±0.6px)
+ *    active only when the cursor is over the panel.
+ * 4. Spring-based physics: Zero re-renders on mousemove, smooth return & settle on mouse exit.
+ * 5. Touch / Reduced-Motion Safe: Disables shake and tilt on mobile or when prefers-reduced-motion is active.
  */
 export default function TiltCard({
     children,
     className = '',
-    maxTilt = 4, // Max tilt in degrees
-    lift = 8, // Lift in px on hover
-    scale = 1.015, // Scale on hover
+    maxTilt = 4, // Max tilt in degrees (3°-5°)
+    maxShiftX = 6, // Max directional X displacement in px
+    maxShiftY = 8, // Max directional Y displacement in px
+    lift = 8, // Base hover lift in px
+    scale = 1.018, // Scale on hover
+    shake = true, // Enable magnetic micro-shake
     glowColor = 'rgba(0, 212, 255, 0.15)',
-    glowRadius = 320,
+    glowRadius = 340,
     accentBorder = '',
     style = {},
     ...props
@@ -26,17 +34,67 @@ export default function TiltCard({
     const cardRef = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
 
-    // Continuous motion values for cursor position normalized between -0.5 and +0.5
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+    // Continuous normalized cursor position (-0.5 to +0.5)
+    const normX = useMotionValue(0);
+    const normY = useMotionValue(0);
 
-    // Spring physics for natural, physical movement & settle on mouse exit
-    const mouseXSpring = useSpring(x, { stiffness: 220, damping: 25 });
-    const mouseYSpring = useSpring(y, { stiffness: 220, damping: 25 });
+    // Micro-shake motion values layered on top
+    const shakeX = useMotionValue(0);
+    const shakeY = useMotionValue(0);
 
-    // 3D rotation mappings
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], [`${maxTilt}deg`, `-${maxTilt}deg`]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], [`-${maxTilt}deg`, `${maxTilt}deg`]);
+    // Damped physical springs for natural directional responsiveness
+    const springX = useSpring(normX, { stiffness: 240, damping: 22 });
+    const springY = useSpring(normY, { stiffness: 240, damping: 22 });
+
+    // 3D rotation mappings (tilts towards the cursor)
+    const rotateX = useTransform(springY, [-0.5, 0.5], [`${maxTilt}deg`, `-${maxTilt}deg`]);
+    const rotateY = useTransform(springX, [-0.5, 0.5], [`-${maxTilt}deg`, `${maxTilt}deg`]);
+
+    // Directional displacement mappings:
+    // Left cursor (normX = -0.5) -> translateX = -maxShiftX
+    // Right cursor (normX = +0.5) -> translateX = +maxShiftX
+    const dirX = useTransform(springX, [-0.5, 0.5], [-maxShiftX, maxShiftX]);
+    // Top cursor (normY = -0.5) -> translateY = -lift - maxShiftY (highest lift)
+    // Bottom cursor (normY = +0.5) -> translateY = -lift + maxShiftY
+    const dirY = useTransform(springY, [-0.5, 0.5], [-lift - maxShiftY * 0.4, -lift + maxShiftY * 0.5]);
+
+    // Combined transforms with micro-shake layered on top
+    const combinedX = useTransform([dirX, shakeX], ([dx, sx]) => (isHovered ? dx + sx : 0));
+    const combinedY = useTransform([dirY, shakeY], ([dy, sy]) => (isHovered ? dy + sy : 0));
+
+    // High-frequency, ultra-subtle physical magnetic micro-shake loop
+    useEffect(() => {
+        if (!shake || !isHovered) {
+            shakeX.set(0);
+            shakeY.set(0);
+            return;
+        }
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion || window.innerWidth < 768) return;
+
+        let frameId;
+        let t = 0;
+
+        const loopShake = () => {
+            t += 0.35;
+            // Combined dual-sine waves for organic, non-monotonous physical jitter (amplitude ±0.45px)
+            const sx = (Math.sin(t * 2.7) * 0.35 + Math.cos(t * 4.1) * 0.25);
+            const sy = (Math.cos(t * 2.3) * 0.35 + Math.sin(t * 3.7) * 0.25);
+
+            shakeX.set(sx);
+            shakeY.set(sy);
+
+            frameId = requestAnimationFrame(loopShake);
+        };
+
+        frameId = requestAnimationFrame(loopShake);
+        return () => {
+            cancelAnimationFrame(frameId);
+            shakeX.set(0);
+            shakeY.set(0);
+        };
+    }, [isHovered, shake, shakeX, shakeY]);
 
     const handleMouseMove = (e) => {
         if (!cardRef.current) return;
@@ -51,8 +109,9 @@ export default function TiltCard({
         cardRef.current.style.setProperty('--mouse-x', `${mouseX}px`);
         cardRef.current.style.setProperty('--mouse-y', `${mouseY}px`);
 
-        x.set(mouseX / width - 0.5);
-        y.set(mouseY / height - 0.5);
+        // Continuous normalized position (-0.5 to +0.5)
+        normX.set(mouseX / width - 0.5);
+        normY.set(mouseY / height - 0.5);
     };
 
     const handleMouseEnter = () => {
@@ -61,8 +120,8 @@ export default function TiltCard({
 
     const handleMouseLeave = () => {
         setIsHovered(false);
-        x.set(0);
-        y.set(0);
+        normX.set(0);
+        normY.set(0);
     };
 
     return (
@@ -72,15 +131,16 @@ export default function TiltCard({
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={{
+                x: combinedX,
+                y: combinedY,
                 rotateX,
                 rotateY,
                 transformStyle: 'preserve-3d',
                 ...style,
             }}
             whileHover={{
-                y: -lift,
                 scale: scale,
-                transition: { duration: 0.25, ease: 'easeOut' },
+                transition: { duration: 0.22, ease: 'easeOut' },
             }}
             whileTap={{
                 scale: 0.985,
