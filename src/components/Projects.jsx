@@ -31,7 +31,7 @@ export const projects = [
         categoryColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
         title: 'Lab Allotment System',
         description:
-            'Web application for managing lab allocations, batch configurations, and timetable lookup.',
+            'Web application for managing lab allocations, batch configurations and timetable lookup.',
         features: [
             'Lab schedule management',
             'Batch configuration',
@@ -52,13 +52,11 @@ export const projects = [
         visual: {
             icon: BsCalendarCheck,
             iconColor: '#b400ff',
-            badge: 'Academic Scheduling Engine',
-            badgeColor: 'text-neon-purple border-neon-purple/30 bg-neon-purple/10',
             bgGradient: 'from-neon-purple/15 via-black/40 to-neon-blue/10',
             features: [
                 { label: 'Schedule Management', value: 'Active ✓', color: '#b400ff' },
                 { label: 'Batch Configuration', value: 'Configured ✓', color: '#00d4ff' },
-                { label: 'Timetable Lookup', value: 'Real-Time ✓', color: '#00ffea' },
+                { label: 'Timetable Lookup', value: 'Live ✓', color: '#00ffea' },
                 { label: 'Student Access', value: 'Verified ✓', color: '#38bdf8' },
             ],
         },
@@ -71,7 +69,7 @@ export const projects = [
         categoryColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
         title: 'SmartSpend – Revenue Tracker',
         description:
-            'Personal finance tracker for managing income, expenses, categories, and balance overview.',
+            'Personal finance tracker for managing income, expenses, categories and balance overview.',
         features: [
             'Income and expense tracking',
             'Category breakdown',
@@ -92,13 +90,11 @@ export const projects = [
         visual: {
             icon: MdAccountBalanceWallet,
             iconColor: '#00d4ff',
-            badge: 'Personal Finance Hub',
-            badgeColor: 'text-neon-blue border-neon-blue/30 bg-neon-blue/10',
             bgGradient: 'from-neon-blue/15 via-black/40 to-neon-purple/10',
             features: [
-                { label: 'Expense Tracking', value: 'Categorized ✓', color: '#00d4ff' },
-                { label: 'Category Breakdown', value: 'Organized ✓', color: '#00ffea' },
-                { label: 'Balance Overview', value: 'Real-Time ✓', color: '#38bdf8' },
+                { label: 'Expense Tracking', value: 'Active ✓', color: '#00d4ff' },
+                { label: 'Category Breakdown', value: 'Tracked ✓', color: '#00ffea' },
+                { label: 'Balance Overview', value: 'Available ✓', color: '#38bdf8' },
                 { label: 'Responsive UI', value: 'Optimized ✓', color: '#a78bfa' },
             ],
         },
@@ -134,12 +130,10 @@ export const projects = [
         visual: {
             icon: MdLocationCity,
             iconColor: '#a78bfa',
-            badge: 'Community Issue Triage',
-            badgeColor: 'text-neon-purple border-neon-purple/30 bg-neon-purple/10',
             bgGradient: 'from-neon-purple/15 via-black/40 to-neon-cyan/10',
             features: [
-                { label: 'Issue Reporting', value: 'Enabled ✓', color: '#00d4ff' },
-                { label: 'Status Tracking', value: 'Triage Flow ✓', color: '#00ffea' },
+                { label: 'Issue Reporting', value: 'Active ✓', color: '#00d4ff' },
+                { label: 'Status Tracking', value: 'Tracked ✓', color: '#00ffea' },
                 { label: 'Community Reports', value: 'Synced ✓', color: '#ffca28' },
                 { label: 'Team Collaboration', value: 'Integrated ✓', color: '#a78bfa' },
             ],
@@ -174,11 +168,9 @@ export const projects = [
         visual: {
             icon: FaShoppingBag,
             iconColor: '#f472b6',
-            badge: 'Boutique E-Commerce Store',
-            badgeColor: 'text-pink-400 border-pink-500/30 bg-pink-500/10',
             bgGradient: 'from-pink-500/15 via-black/40 to-neon-purple/10',
             features: [
-                { label: 'Product Catalog', value: 'Handcrafted ✓', color: '#f472b6' },
+                { label: 'Product Catalog', value: 'Active ✓', color: '#f472b6' },
                 { label: 'Customer Inquiry', value: 'Active Flow ✓', color: '#00ffea' },
                 { label: 'Cart Flow', value: 'Interactive ✓', color: '#a78bfa' },
                 { label: 'Responsive Storefront', value: 'Optimized ✓', color: '#38bdf8' },
@@ -193,7 +185,7 @@ export const projects = [
         categoryColor: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
         title: 'TeamSync',
         description:
-            'Team workspace for managing tasks, projects, collaboration, and role-based administration.',
+            'Team workspace for managing tasks, projects, collaboration and role-based administration.',
         features: [
             'Task management',
             'Project organization',
@@ -215,11 +207,9 @@ export const projects = [
         visual: {
             icon: FaUsers,
             iconColor: '#34d399',
-            badge: 'Workforce Administration Hub',
-            badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
             bgGradient: 'from-emerald-500/15 via-black/40 to-neon-blue/10',
             features: [
-                { label: 'Task Management', value: 'Lifecycle ✓', color: '#34d399' },
+                { label: 'Task Management', value: 'Active ✓', color: '#34d399' },
                 { label: 'Project Tracking', value: 'Real-Time ✓', color: '#00d4ff' },
                 { label: 'Role-Based Access', value: 'Admin Panel ✓', color: '#00ffea' },
                 { label: 'Team Collaboration', value: 'Connected ✓', color: '#61dafb' },
@@ -256,14 +246,12 @@ export const projects = [
         visual: {
             icon: FaGraduationCap,
             iconColor: '#00ffea',
-            badge: 'Kalvium Engineering Dashboard',
-            badgeColor: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10',
             bgGradient: 'from-neon-cyan/15 via-black/40 to-neon-purple/10',
             features: [
-                { label: 'Learning Modules', value: 'Curriculum ✓', color: '#00ffea' },
-                { label: 'Challenge Tracking', value: 'Active Tasks ✓', color: '#00d4ff' },
+                { label: 'Learning Modules', value: 'Active ✓', color: '#00ffea' },
+                { label: 'Challenge Tracking', value: 'Tracked ✓', color: '#00d4ff' },
                 { label: 'Progress Tracking', value: 'Milestones ✓', color: '#b400ff' },
-                { label: 'Student Workspace', value: 'Live Platform ✓', color: '#38bdf8' },
+                { label: 'Student Workspace', value: 'Available ✓', color: '#38bdf8' },
             ],
         },
     },
@@ -275,7 +263,7 @@ export const projects = [
         categoryColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
         title: 'DevMate AI – Developer Assistant',
         description:
-            'AI-powered developer productivity assistant for code, documentation, and development workflows.',
+            'AI-powered developer productivity assistant for code, documentation and development workflows.',
         features: [
             'Code explanation and simplification',
             'Documentation generation',
@@ -297,14 +285,12 @@ export const projects = [
         visual: {
             icon: FaBolt,
             iconColor: '#a78bfa',
-            badge: 'AI Developer Assistant Engine',
-            badgeColor: 'text-neon-purple border-neon-purple/30 bg-neon-purple/10',
             bgGradient: 'from-neon-purple/15 via-black/40 to-neon-blue/10',
             features: [
                 { label: 'Code Assistance', value: 'Gemini 1.5 ✓', color: '#4796e3' },
                 { label: 'API Integration', value: 'FastAPI ✓', color: '#009688' },
                 { label: 'Documentation', value: 'Auto-Gen ✓', color: '#a78bfa' },
-                { label: 'Developer Productivity', value: 'Optimized ✓', color: '#00ffea' },
+                { label: 'Developer Productivity', value: 'Active ✓', color: '#00ffea' },
             ],
         },
     },
@@ -321,7 +307,7 @@ export const projects = [
             'Hand gesture tracking',
             'Real-time interaction',
             'Computer vision integration',
-            'Experimental touchless interface',
+            'Touchless interface',
         ],
         technologies: [
             { label: 'React', icon: SiReact, color: '#61dafb' },
@@ -337,14 +323,12 @@ export const projects = [
         visual: {
             icon: MdOutlineCamera,
             iconColor: '#00ffea',
-            badge: 'Holographic Vision Engine',
-            badgeColor: 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10',
             bgGradient: 'from-neon-cyan/15 via-black/40 to-neon-purple/10',
             features: [
-                { label: 'Gesture Recognition', value: 'Hand Landmarker ✓', color: '#00ffea' },
-                { label: 'Real-Time Tracking', value: '60 FPS Canvas ✓', color: '#00d4ff' },
+                { label: 'Gesture Recognition', value: 'Active ✓', color: '#00ffea' },
+                { label: 'Real-Time Tracking', value: '60 FPS ✓', color: '#00d4ff' },
                 { label: 'Computer Vision', value: 'Touchless UI ✓', color: '#3178c6' },
-                { label: 'Interactive UI', value: 'Holographic ✓', color: '#b400ff' },
+                { label: 'Interactive UI', value: 'Active ✓', color: '#b400ff' },
             ],
         },
     },
@@ -378,14 +362,12 @@ export const projects = [
         visual: {
             icon: FaRecycle,
             iconColor: '#38bdf8',
-            badge: 'Deep Learning Vision Classifier',
-            badgeColor: 'text-neon-blue border-neon-blue/30 bg-neon-blue/10',
             bgGradient: 'from-neon-blue/15 via-black/40 to-neon-purple/10',
             features: [
-                { label: 'Image Classification', value: 'CNN Model ✓', color: '#38bdf8' },
-                { label: 'Recyclable Detection', value: 'High Confidence ✓', color: '#00ffea' },
+                { label: 'Image Classification', value: 'Active ✓', color: '#38bdf8' },
+                { label: 'Recyclable Detection', value: 'Verified ✓', color: '#00ffea' },
                 { label: 'Deep Learning', value: 'TensorFlow ✓', color: '#ff6f00' },
-                { label: 'Computer Vision', value: 'OpenCV Pipeline ✓', color: '#00d4ff' },
+                { label: 'Computer Vision', value: 'OpenCV ✓', color: '#00d4ff' },
             ],
         },
     },
@@ -535,17 +517,7 @@ function ProjectShowcaseCard({ project, index }) {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-neon-cyan/10 blur-3xl pointer-events-none" />
 
                     {/* Central Interactive Feature Showcase */}
-                    <div className="relative z-10 w-full max-w-md space-y-4">
-                        {/* Top System Pill */}
-                        <div className="flex items-center justify-center gap-2">
-                            <span
-                                className={`text-[11px] font-mono tracking-wider px-3.5 py-1 rounded-full border shadow-sm backdrop-blur-md ${project.visual.badgeColor}`}
-                            >
-                                <LuSparkles className="inline-block mr-1.5 text-xs" />
-                                {project.visual.badge}
-                            </span>
-                        </div>
-
+                    <div className="relative z-10 w-full max-w-md space-y-6">
                         {/* Central Large Icon Hub */}
                         <div className="flex justify-center my-2">
                             <div className="relative">
