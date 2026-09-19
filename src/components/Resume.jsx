@@ -29,7 +29,7 @@ const resumeHighlights = [
         title: 'Featured Experience & OS',
         color: 'cyan',
         items: [
-            { label: 'Full-Stack Applications', desc: 'Lab Allotment System, SmartSpend, CivicBridge, Anushka Knits' },
+            { label: 'Full-Stack Applications', desc: 'ZYROCORE, Lab Allotment, SmartSpend, ASP Fashions, Anushka Knits' },
             { label: 'Hackathons & Team Projects', desc: 'Vibeathon 2025 (Replit × Polaris), AI Healthcare Hackathon' },
             { label: 'Open Source Certified', desc: 'Kalvium × Mathesar Open Source Contribution Program' },
         ],

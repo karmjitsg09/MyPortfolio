@@ -57,12 +57,50 @@ import {
 import TiltCard from './TiltCard';
 
 /* ─────────────────────────────────────────
-   1. FEATURED PROJECTS (9 Primary Apps)
+   1. FEATURED PROJECTS (11 Primary Apps)
 ───────────────────────────────────────── */
 export const featuredProjects = [
     {
-        id: 'lab-allotment',
+        id: 'zyrocore',
         orderNumber: '01',
+        icon: LuSparkles,
+        category: 'FULL-STACK / WEB DEVELOPMENT',
+        categoryColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
+        title: 'ZYROCORE',
+        description:
+            'Web project designed and developed as a modern digital product experience, with a responsive interface and production deployment.',
+        features: [
+            'Modern web interface',
+            'Responsive component architecture',
+            'Interactive frontend design',
+            'Production web deployment',
+        ],
+        technologies: [
+            { label: 'React', icon: SiReact, color: '#61dafb' },
+            { label: 'JavaScript', icon: SiJavascript, color: '#facc15' },
+            { label: 'HTML5', icon: SiHtml5, color: '#f97316' },
+            { label: 'CSS3', icon: SiCss, color: '#38bdf8' },
+        ],
+        github: null,
+        live: 'http://zyrocore.in/',
+        border: 'border-neon-cyan/30',
+        glow: 'rgba(0,255,234,0.25)',
+        accent: 'from-neon-cyan via-neon-blue to-neon-purple',
+        visual: {
+            icon: LuSparkles,
+            iconColor: '#00ffea',
+            bgGradient: 'from-neon-cyan/15 via-black/40 to-neon-blue/10',
+            features: [
+                { label: 'Production Website', value: 'Live ✓', color: '#00ffea' },
+                { label: 'UI Architecture', value: 'Responsive ✓', color: '#00d4ff' },
+                { label: 'Web Deployment', value: 'Active ✓', color: '#38bdf8' },
+                { label: 'Digital Experience', value: 'Optimized ✓', color: '#a78bfa' },
+            ],
+        },
+    },
+    {
+        id: 'lab-allotment',
+        orderNumber: '02',
         icon: MdOutlineScience,
         category: 'FULL-STACK',
         categoryColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
@@ -100,7 +138,7 @@ export const featuredProjects = [
     },
     {
         id: 'smart-spend',
-        orderNumber: '02',
+        orderNumber: '03',
         icon: MdAccountBalanceWallet,
         category: 'FULL-STACK',
         categoryColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
@@ -138,7 +176,7 @@ export const featuredProjects = [
     },
     {
         id: 'civic-bridge',
-        orderNumber: '03',
+        orderNumber: '04',
         icon: MdLocationCity,
         category: 'HACKATHON / FULL-STACK',
         categoryColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
@@ -177,8 +215,46 @@ export const featuredProjects = [
         },
     },
     {
+        id: 'asp-fashions',
+        orderNumber: '05',
+        icon: FaShoppingBag,
+        category: 'E-COMMERCE / FULL-STACK',
+        categoryColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
+        title: 'ASP Fashions',
+        description:
+            'E-commerce web application designed for fashion product browsing, catalog presentation, and order management.',
+        features: [
+            'Product catalog browsing',
+            'Order flow interface',
+            'Admin dashboard management',
+            'Responsive shopping experience',
+        ],
+        technologies: [
+            { label: 'HTML5', icon: SiHtml5, color: '#f97316' },
+            { label: 'CSS3', icon: SiCss, color: '#38bdf8' },
+            { label: 'JavaScript', icon: SiJavascript, color: '#facc15' },
+            { label: 'Web Dev', icon: FaShoppingBag, color: '#00d4ff' },
+        ],
+        github: 'https://github.com/karmjitsg09',
+        live: 'https://v0-database-connection-error-mu.vercel.app/',
+        border: 'border-neon-blue/30',
+        glow: 'rgba(0,212,255,0.25)',
+        accent: 'from-neon-blue via-neon-purple to-neon-cyan',
+        visual: {
+            icon: FaShoppingBag,
+            iconColor: '#00d4ff',
+            bgGradient: 'from-neon-blue/15 via-black/40 to-neon-purple/10',
+            features: [
+                { label: 'Product Catalog', value: 'Active ✓', color: '#00d4ff' },
+                { label: 'Order System', value: 'Configured ✓', color: '#00ffea' },
+                { label: 'Admin View', value: 'Available ✓', color: '#a78bfa' },
+                { label: 'Store UI', value: 'Responsive ✓', color: '#38bdf8' },
+            ],
+        },
+    },
+    {
         id: 'anushka-knits',
-        orderNumber: '04',
+        orderNumber: '06',
         icon: FaShoppingBag,
         category: 'FULL-STACK / E-COMMERCE',
         categoryColor: 'text-pink-400 border-pink-500/40 bg-pink-500/10',
@@ -216,7 +292,7 @@ export const featuredProjects = [
     },
     {
         id: 'team-sync',
-        orderNumber: '05',
+        orderNumber: '07',
         icon: FaUsers,
         category: 'FULL-STACK / PRODUCTIVITY',
         categoryColor: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10',
@@ -255,7 +331,7 @@ export const featuredProjects = [
     },
     {
         id: 'kalvi-learn',
-        orderNumber: '06',
+        orderNumber: '08',
         icon: FaGraduationCap,
         category: 'WEB APP / LEARNING PLATFORM',
         categoryColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
@@ -294,7 +370,7 @@ export const featuredProjects = [
     },
     {
         id: 'devmate',
-        orderNumber: '07',
+        orderNumber: '09',
         icon: FaBolt,
         category: 'AI / DEVELOPER TOOL',
         categoryColor: 'text-neon-purple border-neon-purple/40 bg-neon-purple/10',
@@ -333,7 +409,7 @@ export const featuredProjects = [
     },
     {
         id: 'synaptix',
-        orderNumber: '08',
+        orderNumber: '10',
         icon: MdOutlineCamera,
         category: 'AI / COMPUTER VISION',
         categoryColor: 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10',
@@ -371,7 +447,7 @@ export const featuredProjects = [
     },
     {
         id: 'ai-waste',
-        orderNumber: '09',
+        orderNumber: '11',
         icon: FaRecycle,
         category: 'AI / ML',
         categoryColor: 'text-neon-blue border-neon-blue/40 bg-neon-blue/10',
@@ -564,24 +640,6 @@ export const additionalProjects = [
         ],
         github: 'https://github.com/karmjitsg09/MyPortfolio',
         live: 'https://karmjit.me/',
-    },
-    {
-        id: 'asp-fashions',
-        title: 'ASP Fashions — Earlier E-Commerce Version',
-        category: 'Full-Stack / E-Commerce',
-        filterCategory: 'Full-Stack',
-        description:
-            'Earlier boutique e-commerce prototype that evolved into the Anushka Knits World catalog storefront.',
-        icon: FaShoppingBag,
-        iconColor: '#f472b6',
-        badgeColor: 'text-pink-400 border-pink-500/40 bg-pink-500/10',
-        technologies: [
-            { label: 'HTML5', icon: SiHtml5, color: '#f97316' },
-            { label: 'CSS3', icon: SiCss, color: '#38bdf8' },
-            { label: 'JavaScript', icon: SiJavascript, color: '#facc15' },
-        ],
-        github: 'https://github.com/karmjitsg09/ANUSHKAA-KNITS-WORLD',
-        live: null,
     },
     {
         id: 'job-analytics',
@@ -821,7 +879,7 @@ function ProjectShowcaseCard({ project, index }) {
                                 {project.category}
                             </span>
                             <span className="text-xs font-mono text-slate-500 font-bold">
-                                {project.orderNumber} / 09
+                                {project.orderNumber} / {String(featuredProjects.length).padStart(2, '0')}
                             </span>
                         </div>
 
@@ -1059,6 +1117,7 @@ function AdditionalProjectCard({ project }) {
 const FILTER_CATEGORIES = [
     'All',
     'Full-Stack',
+    'E-Commerce',
     'AI / ML',
     'Computer Vision',
     'Data & Analytics',
@@ -1123,7 +1182,7 @@ export default function Projects() {
                     </p>
                 </motion.div>
 
-                {/* Stack of 9 Featured Large Split Cards */}
+                {/* Stack of 11 Featured Large Split Cards */}
                 <div className="flex flex-col gap-10 sm:gap-14 mb-28">
                     {featuredProjects.map((project, index) => (
                         <ProjectShowcaseCard key={project.id} project={project} index={index} />
