@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { scrollToSection } from '../utils/navigation';
+
 const navLinks = [
     { label: 'Home', to: 'hero' },
     { label: 'About', to: 'about' },
@@ -12,11 +14,6 @@ const navLinks = [
     { label: 'Open Source', to: 'opensource' },
     { label: 'Contact', to: 'contact' },
 ];
-
-function scrollTo(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
@@ -45,6 +42,13 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleMobileClick = (to) => {
+        setMenuOpen(false);
+        setTimeout(() => {
+            scrollToSection(to);
+        }, 120);
+    };
+
     return (
         <motion.nav
             initial={{ y: -80, opacity: 0 }}
@@ -59,7 +63,7 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
                 {/* Brand Logo */}
                 <button
-                    onClick={() => scrollTo('hero')}
+                    onClick={() => scrollToSection('hero')}
                     className="cursor-pointer flex items-center gap-2.5 group bg-transparent border-0 focus:outline-none"
                     aria-label="Scroll to Top"
                 >
@@ -85,7 +89,7 @@ export default function Navbar() {
                         return (
                             <li key={link.to} className="relative">
                                 <button
-                                    onClick={() => scrollTo(link.to)}
+                                    onClick={() => scrollToSection(link.to)}
                                     className={`px-3.5 py-1.5 text-xs font-medium rounded-xl transition-all cursor-pointer relative z-10 focus:outline-none ${
                                         isActive
                                             ? 'text-dark font-bold'
@@ -141,10 +145,7 @@ export default function Navbar() {
                             {navLinks.map((link) => (
                                 <li key={link.to}>
                                     <button
-                                        onClick={() => {
-                                            scrollTo(link.to);
-                                            setMenuOpen(false);
-                                        }}
+                                        onClick={() => handleMobileClick(link.to)}
                                         className={`block w-full text-left py-2.5 px-3 rounded-lg text-xs font-mono transition-colors cursor-pointer ${
                                             activeSection === link.to
                                                 ? 'bg-neon-blue/15 text-neon-cyan font-bold border-l-2 border-neon-cyan'

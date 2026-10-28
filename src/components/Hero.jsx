@@ -4,6 +4,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
 import ParticleBackground from './ParticleBackground';
 import { hackathons } from '../data/hackathonsData';
+import { scrollToSection } from '../utils/navigation';
 
 const roles = [
     'Full-Stack Developer',
@@ -88,8 +89,7 @@ function TypewriterText({ texts }) {
 }
 
 function scrollTo(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToSection(id);
 }
 
 /* ── Floating Profile Image ── */

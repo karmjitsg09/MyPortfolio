@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaGithub, FaLinkedin, FaHeart } from 'react-icons/fa';
 import { HiMail } from 'react-icons/hi';
+import { scrollToSection } from '../utils/navigation';
 
 const navItems = [
     { label: 'Home', id: 'hero' },
@@ -22,8 +23,7 @@ const socials = [
 ];
 
 function scrollTo(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToSection(id);
 }
 
 export default function Footer() {

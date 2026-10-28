@@ -1984,7 +1984,7 @@ export default function Projects() {
     const totalProjectCount = featuredProjects.length + additionalProjects.length;
 
     return (
-        <section id="projects" className="py-28 relative overflow-hidden">
+        <section id="projects" className="py-28 relative overflow-hidden scroll-mt-20">
             {/* Background Glow Accents */}
             <div className="absolute top-1/4 left-0 w-96 h-96 rounded-full bg-neon-purple/5 blur-3xl pointer-events-none" />
             <div className="absolute top-2/3 right-0 w-96 h-96 rounded-full bg-neon-blue/5 blur-3xl pointer-events-none" />

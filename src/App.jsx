@@ -17,6 +17,8 @@ import Resume from './components/Resume';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+import { scrollToSection } from './utils/navigation';
+
 class SectionErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -42,18 +44,41 @@ class SectionErrorBoundary extends React.Component {
 
 function App() {
   useEffect(() => {
-    // If a hash was specifically requested (e.g. #projects), scroll to it after mount
+    const handleHashNavigation = (behavior = 'smooth') => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const targetId = hash.replace('#', '');
+      scrollToSection(targetId, { behavior, offset: 75 });
+    };
+
     if (window.location.hash) {
-      const targetId = window.location.hash.replace('#', '');
-      const element = document.getElementById(targetId);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 150);
-      }
+      // Immediate placement without waiting, followed by alignment passes
+      // as 3D canvas and dynamic particle layers settle into their final dimensions
+      handleHashNavigation('auto');
+      const t1 = setTimeout(() => handleHashNavigation('smooth'), 200);
+      const t2 = setTimeout(() => handleHashNavigation('smooth'), 600);
+      const t3 = setTimeout(() => handleHashNavigation('auto'), 1200);
+
+      const onHashChange = () => {
+        handleHashNavigation('smooth');
+      };
+      window.addEventListener('hashchange', onHashChange);
+
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+        window.removeEventListener('hashchange', onHashChange);
+      };
     } else {
       // Default to top of page (Hero) on initial fresh load
       window.scrollTo(0, 0);
+
+      const onHashChange = () => {
+        handleHashNavigation('smooth');
+      };
+      window.addEventListener('hashchange', onHashChange);
+      return () => window.removeEventListener('hashchange', onHashChange);
     }
   }, []);
 
