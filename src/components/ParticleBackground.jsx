@@ -26,6 +26,149 @@ const PALETTE = [
     { r: 236, g: 72, b: 153 },  // Magenta Accent
 ];
 
+// Particle Class defined outside React component to adhere to hook rules and avoid prototype reallocations
+class Particle {
+    constructor(w, h, isSpecial = false, prefersReducedMotion = false) {
+        this.reset(w, h, isSpecial, prefersReducedMotion);
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+    }
+
+    reset(w, h, isSpecial = false, prefersReducedMotion = false) {
+        this.isSpecial = isSpecial;
+        this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+
+        // 3 Depth Layers: 0: background (slow, small), 1: midground, 2: foreground
+        this.layer = isSpecial ? 2 : Math.random() < 0.5 ? 0 : Math.random() < 0.8 ? 1 : 2;
+
+        if (this.layer === 0) {
+            this.baseRadius = Math.random() * 0.9 + 0.6;
+            this.baseAlpha = Math.random() * 0.25 + 0.15;
+            this.speedMult = 0.45;
+        } else if (this.layer === 1) {
+            this.baseRadius = Math.random() * 1.4 + 1.1;
+            this.baseAlpha = Math.random() * 0.35 + 0.25;
+            this.speedMult = 0.8;
+        } else {
+            this.baseRadius = Math.random() * 2.2 + 1.8;
+            this.baseAlpha = Math.random() * 0.45 + 0.4;
+            this.speedMult = 1.1;
+        }
+
+        this.radius = this.baseRadius;
+        this.alpha = this.baseAlpha;
+
+        // Independent velocity with 2D free drift
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (Math.random() * (PARTICLE_CONFIG.maxSpeed - PARTICLE_CONFIG.minSpeed) + PARTICLE_CONFIG.minSpeed) * this.speedMult;
+        this.vx = Math.cos(angle) * (prefersReducedMotion ? 0.08 : speed);
+        this.vy = Math.sin(angle) * (prefersReducedMotion ? 0.08 : speed);
+
+        // Organic wandering / noise drift attributes
+        this.wanderAngle = Math.random() * Math.PI * 2;
+        this.wanderSpeed = 0.015 + Math.random() * 0.02;
+
+        // Shapes: 80% circle, 12% rounded digital node, 8% diamond star
+        const shapeRoll = Math.random();
+        this.shape = shapeRoll < 0.8 ? 'circle' : shapeRoll < 0.92 ? 'square' : 'diamond';
+
+        // Pulsing energy behavior for special particles
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.pulseSpeed = 0.03 + Math.random() * 0.03;
+    }
+
+    update(w, h, mouse, prefersReducedMotion) {
+        // Organic smooth wander (slowly shifting trajectory)
+        if (!prefersReducedMotion) {
+            this.wanderAngle += (Math.random() - 0.5) * this.wanderSpeed;
+            this.vx += Math.cos(this.wanderAngle) * 0.012;
+            this.vy += Math.sin(this.wanderAngle) * 0.012;
+
+            // Cap maximum velocity
+            const maxV = PARTICLE_CONFIG.maxSpeed * this.speedMult * 1.4;
+            const curSpeed = Math.hypot(this.vx, this.vy);
+            if (curSpeed > maxV) {
+                this.vx = (this.vx / curSpeed) * maxV;
+                this.vy = (this.vy / curSpeed) * maxV;
+            }
+        }
+
+        // Mouse interaction: subtle gentle deflection
+        if (mouse && mouse.isActive && !prefersReducedMotion) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < PARTICLE_CONFIG.mouseRadius && dist > 1) {
+                const force = (1 - dist / PARTICLE_CONFIG.mouseRadius) * PARTICLE_CONFIG.mouseRepelForce;
+                this.vx += (dx / dist) * force;
+                this.vy += (dy / dist) * force;
+            }
+        }
+
+        // Apply position
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Screen boundary wrapping without teleport glitches
+        const pad = 15;
+        if (this.x < -pad) this.x = w + pad;
+        if (this.x > w + pad) this.x = -pad;
+        if (this.y < -pad) this.y = h + pad;
+        if (this.y > h + pad) this.y = -pad;
+
+        // Energy pulse for special particles
+        if (this.isSpecial) {
+            this.pulsePhase += this.pulseSpeed;
+            const pulse = (Math.sin(this.pulsePhase) + 1) / 2; // 0 to 1
+            this.alpha = this.baseAlpha + pulse * 0.35;
+            this.radius = this.baseRadius + pulse * 1.2;
+        }
+    }
+
+    draw(context) {
+        const { r, g, b } = this.color;
+        context.save();
+
+        // Subtle radial glow for foreground or special particles
+        if ((this.layer === 2 || this.isSpecial) && this.radius > 1.4) {
+            const glowRadius = this.radius * 3.2;
+            const glowGradient = context.createRadialGradient(
+                this.x, this.y, 0,
+                this.x, this.y, glowRadius
+            );
+            glowGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.alpha * 0.7})`);
+            glowGradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+            context.fillStyle = glowGradient;
+            context.beginPath();
+            context.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
+            context.fill();
+        }
+
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.alpha})`;
+
+        if (this.shape === 'circle') {
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            context.fill();
+        } else if (this.shape === 'square') {
+            const size = this.radius * 1.6;
+            context.fillRect(this.x - size / 2, this.y - size / 2, size, size);
+        } else if (this.shape === 'diamond') {
+            const size = this.radius * 1.8;
+            context.beginPath();
+            context.moveTo(this.x, this.y - size);
+            context.lineTo(this.x + size, this.y);
+            context.lineTo(this.x, this.y + size);
+            context.lineTo(this.x - size, this.y);
+            context.closePath();
+            context.fill();
+        }
+
+        context.restore();
+    }
+}
+
 export default function ParticleBackground() {
     const canvasRef = useRef(null);
 
@@ -78,150 +221,6 @@ export default function ParticleBackground() {
             heroElement.addEventListener('mouseleave', handleMouseLeave, { passive: true });
         }
 
-        // Particle Class
-        class Particle {
-            constructor(w, h, isSpecial = false) {
-                this.reset(w, h, isSpecial);
-                // Distribute initial positions randomly across the full viewport
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-            }
-
-            reset(w, h, isSpecial = false) {
-                this.isSpecial = isSpecial;
-                this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-
-                // 3 Depth Layers: 0: background (slow, small), 1: midground, 2: foreground
-                this.layer = isSpecial ? 2 : Math.random() < 0.5 ? 0 : Math.random() < 0.8 ? 1 : 2;
-
-                if (this.layer === 0) {
-                    this.baseRadius = Math.random() * 0.9 + 0.6;
-                    this.baseAlpha = Math.random() * 0.25 + 0.15;
-                    this.speedMult = 0.45;
-                } else if (this.layer === 1) {
-                    this.baseRadius = Math.random() * 1.4 + 1.1;
-                    this.baseAlpha = Math.random() * 0.35 + 0.25;
-                    this.speedMult = 0.8;
-                } else {
-                    this.baseRadius = Math.random() * 2.2 + 1.8;
-                    this.baseAlpha = Math.random() * 0.45 + 0.4;
-                    this.speedMult = 1.1;
-                }
-
-                this.radius = this.baseRadius;
-                this.alpha = this.baseAlpha;
-
-                // Independent velocity with 2D free drift
-                const angle = Math.random() * Math.PI * 2;
-                const speed = (Math.random() * (PARTICLE_CONFIG.maxSpeed - PARTICLE_CONFIG.minSpeed) + PARTICLE_CONFIG.minSpeed) * this.speedMult;
-                this.vx = Math.cos(angle) * (prefersReducedMotion ? 0.08 : speed);
-                this.vy = Math.sin(angle) * (prefersReducedMotion ? 0.08 : speed);
-
-                // Organic wandering / noise drift attributes
-                this.wanderAngle = Math.random() * Math.PI * 2;
-                this.wanderSpeed = 0.015 + Math.random() * 0.02;
-
-                // Shapes: 80% circle, 12% rounded digital node, 8% diamond star
-                const shapeRoll = Math.random();
-                this.shape = shapeRoll < 0.8 ? 'circle' : shapeRoll < 0.92 ? 'square' : 'diamond';
-
-                // Pulsing energy behavior for special particles
-                this.pulsePhase = Math.random() * Math.PI * 2;
-                this.pulseSpeed = 0.03 + Math.random() * 0.03;
-            }
-
-            update(w, h) {
-                // Organic smooth wander (slowly shifting trajectory)
-                if (!prefersReducedMotion) {
-                    this.wanderAngle += (Math.random() - 0.5) * this.wanderSpeed;
-                    this.vx += Math.cos(this.wanderAngle) * 0.012;
-                    this.vy += Math.sin(this.wanderAngle) * 0.012;
-
-                    // Cap maximum velocity
-                    const maxV = PARTICLE_CONFIG.maxSpeed * this.speedMult * 1.4;
-                    const curSpeed = Math.hypot(this.vx, this.vy);
-                    if (curSpeed > maxV) {
-                        this.vx = (this.vx / curSpeed) * maxV;
-                        this.vy = (this.vy / curSpeed) * maxV;
-                    }
-                }
-
-                // Mouse interaction: subtle gentle deflection
-                if (mouse.isActive && !prefersReducedMotion) {
-                    const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
-                    const dist = Math.hypot(dx, dy);
-
-                    if (dist < PARTICLE_CONFIG.mouseRadius && dist > 1) {
-                        const force = (1 - dist / PARTICLE_CONFIG.mouseRadius) * PARTICLE_CONFIG.mouseRepelForce;
-                        this.vx += (dx / dist) * force;
-                        this.vy += (dy / dist) * force;
-                    }
-                }
-
-                // Apply position
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Screen boundary wrapping without teleport glitches
-                const pad = 15;
-                if (this.x < -pad) this.x = w + pad;
-                if (this.x > w + pad) this.x = -pad;
-                if (this.y < -pad) this.y = h + pad;
-                if (this.y > h + pad) this.y = -pad;
-
-                // Energy pulse for special particles
-                if (this.isSpecial) {
-                    this.pulsePhase += this.pulseSpeed;
-                    const pulse = (Math.sin(this.pulsePhase) + 1) / 2; // 0 to 1
-                    this.alpha = this.baseAlpha + pulse * 0.35;
-                    this.radius = this.baseRadius + pulse * 1.2;
-                }
-            }
-
-            draw(context) {
-                const { r, g, b } = this.color;
-                context.save();
-
-                // Subtle radial glow for foreground or special particles
-                if ((this.layer === 2 || this.isSpecial) && this.radius > 1.4) {
-                    const glowRadius = this.radius * 3.2;
-                    const glowGradient = context.createRadialGradient(
-                        this.x, this.y, 0,
-                        this.x, this.y, glowRadius
-                    );
-                    glowGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.alpha * 0.7})`);
-                    glowGradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-                    context.fillStyle = glowGradient;
-                    context.beginPath();
-                    context.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
-                    context.fill();
-                }
-
-                context.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.alpha})`;
-
-                if (this.shape === 'circle') {
-                    context.beginPath();
-                    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    context.fill();
-                } else if (this.shape === 'square') {
-                    const size = this.radius * 1.6;
-                    context.fillRect(this.x - size / 2, this.y - size / 2, size, size);
-                } else if (this.shape === 'diamond') {
-                    const size = this.radius * 1.8;
-                    context.beginPath();
-                    context.moveTo(this.x, this.y - size);
-                    context.lineTo(this.x + size, this.y);
-                    context.lineTo(this.x, this.y + size);
-                    context.lineTo(this.x - size, this.y);
-                    context.closePath();
-                    context.fill();
-                }
-
-                context.restore();
-            }
-        }
-
         // Initialize particle array
         const initParticles = () => {
             const count = getParticleCount(width);
@@ -230,7 +229,7 @@ export default function ParticleBackground() {
 
             for (let i = 0; i < count; i++) {
                 const isSpecial = i < specialCount;
-                particles.push(new Particle(width, height, isSpecial));
+                particles.push(new Particle(width, height, isSpecial, prefersReducedMotion));
             }
         };
 
@@ -285,7 +284,7 @@ export default function ParticleBackground() {
             // Update & draw each particle
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
-                p.update(width, height);
+                p.update(width, height, mouse, prefersReducedMotion);
                 p.draw(ctx);
             }
 

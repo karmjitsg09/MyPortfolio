@@ -25,6 +25,141 @@ const PALETTE = [
     { r: 236, g: 72, b: 153 },  // Magenta Accent
 ];
 
+class Particle {
+    constructor(w, h, isSpecial = false, prefersReducedMotion = false) {
+        this.reset(w, h, isSpecial, prefersReducedMotion);
+        this.x = Math.random() * w;
+        this.y = Math.random() * h;
+    }
+
+    reset(w, h, isSpecial = false, prefersReducedMotion = false) {
+        this.isSpecial = isSpecial;
+        this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+
+        // 3 Depth Layers: 0: background (slow, small), 1: midground, 2: foreground
+        this.layer = isSpecial ? 2 : Math.random() < 0.52 ? 0 : Math.random() < 0.82 ? 1 : 2;
+
+        if (this.layer === 0) {
+            this.baseRadius = Math.random() * 0.8 + 0.5;
+            this.baseAlpha = Math.random() * 0.22 + 0.12;
+            this.speedMult = 0.45;
+        } else if (this.layer === 1) {
+            this.baseRadius = Math.random() * 1.3 + 1.0;
+            this.baseAlpha = Math.random() * 0.32 + 0.22;
+            this.speedMult = 0.75;
+        } else {
+            this.baseRadius = Math.random() * 2.0 + 1.6;
+            this.baseAlpha = Math.random() * 0.42 + 0.35;
+            this.speedMult = 1.05;
+        }
+
+        this.radius = this.baseRadius;
+        this.alpha = this.baseAlpha;
+
+        // Independent 2D vector drift
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (Math.random() * (GLOBAL_PARTICLE_CONFIG.maxSpeed - GLOBAL_PARTICLE_CONFIG.minSpeed) + GLOBAL_PARTICLE_CONFIG.minSpeed) * this.speedMult;
+        this.vx = Math.cos(angle) * (prefersReducedMotion ? 0.05 : speed);
+        this.vy = Math.sin(angle) * (prefersReducedMotion ? 0.05 : speed);
+
+        this.wanderAngle = Math.random() * Math.PI * 2;
+        this.wanderSpeed = 0.012 + Math.random() * 0.018;
+
+        const shapeRoll = Math.random();
+        this.shape = shapeRoll < 0.82 ? 'circle' : shapeRoll < 0.93 ? 'square' : 'diamond';
+
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.pulseSpeed = 0.025 + Math.random() * 0.025;
+    }
+
+    update(w, h, mouse, prefersReducedMotion) {
+        if (!prefersReducedMotion) {
+            this.wanderAngle += (Math.random() - 0.5) * this.wanderSpeed;
+            this.vx += Math.cos(this.wanderAngle) * 0.01;
+            this.vy += Math.sin(this.wanderAngle) * 0.01;
+
+            const maxV = GLOBAL_PARTICLE_CONFIG.maxSpeed * this.speedMult * 1.35;
+            const curSpeed = Math.hypot(this.vx, this.vy);
+            if (curSpeed > maxV) {
+                this.vx = (this.vx / curSpeed) * maxV;
+                this.vy = (this.vy / curSpeed) * maxV;
+            }
+        }
+
+        // Smooth mouse repulsion
+        if (mouse && mouse.isActive && !prefersReducedMotion) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < GLOBAL_PARTICLE_CONFIG.mouseRadius && dist > 1) {
+                const force = (1 - dist / GLOBAL_PARTICLE_CONFIG.mouseRadius) * GLOBAL_PARTICLE_CONFIG.mouseRepelForce;
+                this.vx += (dx / dist) * force;
+                this.vy += (dy / dist) * force;
+            }
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Seamless fixed-screen edge wrapping
+        const pad = 15;
+        if (this.x < -pad) this.x = w + pad;
+        if (this.x > w + pad) this.x = -pad;
+        if (this.y < -pad) this.y = h + pad;
+        if (this.y > h + pad) this.y = -pad;
+
+        // Pulsing energy nodes
+        if (this.isSpecial) {
+            this.pulsePhase += this.pulseSpeed;
+            const pulse = (Math.sin(this.pulsePhase) + 1) / 2;
+            this.alpha = this.baseAlpha + pulse * 0.32;
+            this.radius = this.baseRadius + pulse * 1.1;
+        }
+    }
+
+    draw(context) {
+        const { r, g, b } = this.color;
+        context.save();
+
+        if ((this.layer === 2 || this.isSpecial) && this.radius > 1.3) {
+            const glowRadius = this.radius * 3.0;
+            const glowGradient = context.createRadialGradient(
+                this.x, this.y, 0,
+                this.x, this.y, glowRadius
+            );
+            glowGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.alpha * 0.65})`);
+            glowGradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+            context.fillStyle = glowGradient;
+            context.beginPath();
+            context.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
+            context.fill();
+        }
+
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.alpha})`;
+
+        if (this.shape === 'circle') {
+            context.beginPath();
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            context.fill();
+        } else if (this.shape === 'square') {
+            const size = this.radius * 1.5;
+            context.fillRect(this.x - size / 2, this.y - size / 2, size, size);
+        } else if (this.shape === 'diamond') {
+            const size = this.radius * 1.7;
+            context.beginPath();
+            context.moveTo(this.x, this.y - size);
+            context.lineTo(this.x + size, this.y);
+            context.lineTo(this.x, this.y + size);
+            context.lineTo(this.x - size, this.y);
+            context.closePath();
+            context.fill();
+        }
+
+        context.restore();
+    }
+}
+
 export default function GlobalBackground() {
     const canvasRef = useRef(null);
 
@@ -70,141 +205,6 @@ export default function GlobalBackground() {
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
         document.body.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
-        class Particle {
-            constructor(w, h, isSpecial = false) {
-                this.reset(w, h, isSpecial);
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-            }
-
-            reset(w, h, isSpecial = false) {
-                this.isSpecial = isSpecial;
-                this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
-
-                // 3 Depth Layers: 0: background (slow, small), 1: midground, 2: foreground
-                this.layer = isSpecial ? 2 : Math.random() < 0.52 ? 0 : Math.random() < 0.82 ? 1 : 2;
-
-                if (this.layer === 0) {
-                    this.baseRadius = Math.random() * 0.8 + 0.5;
-                    this.baseAlpha = Math.random() * 0.22 + 0.12;
-                    this.speedMult = 0.45;
-                } else if (this.layer === 1) {
-                    this.baseRadius = Math.random() * 1.3 + 1.0;
-                    this.baseAlpha = Math.random() * 0.32 + 0.22;
-                    this.speedMult = 0.75;
-                } else {
-                    this.baseRadius = Math.random() * 2.0 + 1.6;
-                    this.baseAlpha = Math.random() * 0.42 + 0.35;
-                    this.speedMult = 1.05;
-                }
-
-                this.radius = this.baseRadius;
-                this.alpha = this.baseAlpha;
-
-                // Independent 2D vector drift
-                const angle = Math.random() * Math.PI * 2;
-                const speed = (Math.random() * (GLOBAL_PARTICLE_CONFIG.maxSpeed - GLOBAL_PARTICLE_CONFIG.minSpeed) + GLOBAL_PARTICLE_CONFIG.minSpeed) * this.speedMult;
-                this.vx = Math.cos(angle) * (prefersReducedMotion ? 0.05 : speed);
-                this.vy = Math.sin(angle) * (prefersReducedMotion ? 0.05 : speed);
-
-                this.wanderAngle = Math.random() * Math.PI * 2;
-                this.wanderSpeed = 0.012 + Math.random() * 0.018;
-
-                const shapeRoll = Math.random();
-                this.shape = shapeRoll < 0.82 ? 'circle' : shapeRoll < 0.93 ? 'square' : 'diamond';
-
-                this.pulsePhase = Math.random() * Math.PI * 2;
-                this.pulseSpeed = 0.025 + Math.random() * 0.025;
-            }
-
-            update(w, h) {
-                if (!prefersReducedMotion) {
-                    this.wanderAngle += (Math.random() - 0.5) * this.wanderSpeed;
-                    this.vx += Math.cos(this.wanderAngle) * 0.01;
-                    this.vy += Math.sin(this.wanderAngle) * 0.01;
-
-                    const maxV = GLOBAL_PARTICLE_CONFIG.maxSpeed * this.speedMult * 1.35;
-                    const curSpeed = Math.hypot(this.vx, this.vy);
-                    if (curSpeed > maxV) {
-                        this.vx = (this.vx / curSpeed) * maxV;
-                        this.vy = (this.vy / curSpeed) * maxV;
-                    }
-                }
-
-                // Smooth mouse repulsion
-                if (mouse.isActive && !prefersReducedMotion) {
-                    const dx = this.x - mouse.x;
-                    const dy = this.y - mouse.y;
-                    const dist = Math.hypot(dx, dy);
-
-                    if (dist < GLOBAL_PARTICLE_CONFIG.mouseRadius && dist > 1) {
-                        const force = (1 - dist / GLOBAL_PARTICLE_CONFIG.mouseRadius) * GLOBAL_PARTICLE_CONFIG.mouseRepelForce;
-                        this.vx += (dx / dist) * force;
-                        this.vy += (dy / dist) * force;
-                    }
-                }
-
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Seamless fixed-screen edge wrapping
-                const pad = 15;
-                if (this.x < -pad) this.x = w + pad;
-                if (this.x > w + pad) this.x = -pad;
-                if (this.y < -pad) this.y = h + pad;
-                if (this.y > h + pad) this.y = -pad;
-
-                // Pulsing energy nodes
-                if (this.isSpecial) {
-                    this.pulsePhase += this.pulseSpeed;
-                    const pulse = (Math.sin(this.pulsePhase) + 1) / 2;
-                    this.alpha = this.baseAlpha + pulse * 0.32;
-                    this.radius = this.baseRadius + pulse * 1.1;
-                }
-            }
-
-            draw(context) {
-                const { r, g, b } = this.color;
-                context.save();
-
-                if ((this.layer === 2 || this.isSpecial) && this.radius > 1.3) {
-                    const glowRadius = this.radius * 3.0;
-                    const glowGradient = context.createRadialGradient(
-                        this.x, this.y, 0,
-                        this.x, this.y, glowRadius
-                    );
-                    glowGradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.alpha * 0.65})`);
-                    glowGradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-                    context.fillStyle = glowGradient;
-                    context.beginPath();
-                    context.arc(this.x, this.y, glowRadius, 0, Math.PI * 2);
-                    context.fill();
-                }
-
-                context.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.alpha})`;
-
-                if (this.shape === 'circle') {
-                    context.beginPath();
-                    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    context.fill();
-                } else if (this.shape === 'square') {
-                    const size = this.radius * 1.5;
-                    context.fillRect(this.x - size / 2, this.y - size / 2, size, size);
-                } else if (this.shape === 'diamond') {
-                    const size = this.radius * 1.7;
-                    context.beginPath();
-                    context.moveTo(this.x, this.y - size);
-                    context.lineTo(this.x + size, this.y);
-                    context.lineTo(this.x, this.y + size);
-                    context.lineTo(this.x - size, this.y);
-                    context.closePath();
-                    context.fill();
-                }
-
-                context.restore();
-            }
-        }
-
         const initParticles = () => {
             const count = getParticleCount(width);
             const specialCount = Math.floor(count * GLOBAL_PARTICLE_CONFIG.specialParticleRatio);
@@ -212,7 +212,7 @@ export default function GlobalBackground() {
 
             for (let i = 0; i < count; i++) {
                 const isSpecial = i < specialCount;
-                particles.push(new Particle(width, height, isSpecial));
+                particles.push(new Particle(width, height, isSpecial, prefersReducedMotion));
             }
         };
 
@@ -272,7 +272,7 @@ export default function GlobalBackground() {
 
                 for (let i = 0; i < particles.length; i++) {
                     const p = particles[i];
-                    p.update(width, height);
+                    p.update(width, height, mouse, prefersReducedMotion);
                     p.draw(ctx);
                 }
             }

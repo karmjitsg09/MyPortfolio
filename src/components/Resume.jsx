@@ -21,7 +21,7 @@ const resumeHighlights = [
         items: [
             { label: 'Frontend', desc: 'React.js, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS' },
             { label: 'Backend & DB', desc: 'Node.js, Express.js, REST APIs, PostgreSQL, Supabase, Firebase' },
-            { label: 'AI & Tools', desc: 'Python, TensorFlow, Google Gemini API, Git, GitHub, Linux, Vercel' },
+            { label: 'AI, Agents & Tools', desc: 'Playwright, Python, TensorFlow, OpenCV, Gemini API, Git, Linux, Vercel' },
         ],
     },
     {
@@ -29,8 +29,8 @@ const resumeHighlights = [
         title: 'Featured Experience & OS',
         color: 'cyan',
         items: [
-            { label: 'Full-Stack Applications', desc: 'ZYROCORE, Lab Allotment, SmartSpend, ASP Fashions, Anushka Knits' },
-            { label: 'Hackathons & Team Projects', desc: 'Vibeathon 2025 (Replit × Polaris), AI Healthcare Hackathon' },
+            { label: 'Engineering Projects', desc: 'AI Video Agent, KalviLearn, Lab Allotment, SmartSpend, TeamSync, Anushka Knits' },
+            { label: 'Hackathons & Team Lead', desc: 'Vibeathon 2025 (Replit × Polaris), Odoo × NMIT 2026 (Team Lead)' },
             { label: 'Open Source Certified', desc: 'Kalvium × Mathesar Open Source Contribution Program' },
         ],
     },

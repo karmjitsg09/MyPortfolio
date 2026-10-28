@@ -128,7 +128,7 @@ export default function Contact() {
 
                         {/* Direct Contact Cards Grid */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {contacts.map((contact, i) => {
+                            {contacts.map((contact) => {
                                 const c = colorMap[contact.color];
                                 return (
                                     <motion.a

@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
 export default function CustomCursor() {
-    const [enabled, setEnabled] = useState(false);
+    const [enabled] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)').matches;
+    });
     const [isHovered, setIsHovered] = useState(false);
     const [isClicking, setIsClicking] = useState(false);
 
@@ -13,11 +16,7 @@ export default function CustomCursor() {
     const ringY = useSpring(0, { damping: 20, stiffness: 200 });
 
     useEffect(() => {
-        // Check if device has mouse pointer and user doesn't prefer reduced motion
-        const mediaQuery = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)');
-        if (!mediaQuery.matches) return;
-
-        setEnabled(true);
+        if (!enabled) return;
 
         const handleMouseMove = (e) => {
             cursorX.set(e.clientX);
@@ -58,7 +57,7 @@ export default function CustomCursor() {
             window.removeEventListener('mouseup', handleMouseUp);
             document.removeEventListener('mouseover', handleMouseOver);
         };
-    }, [cursorX, cursorY, ringX, ringY]);
+    }, [enabled, cursorX, cursorY, ringX, ringY]);
 
     if (!enabled) return null;
 

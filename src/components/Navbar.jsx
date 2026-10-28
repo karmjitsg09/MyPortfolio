@@ -7,9 +7,9 @@ const navLinks = [
     { label: 'Skills', to: 'skills' },
     { label: 'Projects', to: 'projects' },
     { label: 'Journey', to: 'journey' },
+    { label: 'Research', to: 'research' },
     { label: 'Hackathons', to: 'hackathons' },
     { label: 'Open Source', to: 'opensource' },
-    { label: 'Resume', to: 'resume' },
     { label: 'Contact', to: 'contact' },
 ];
 
@@ -73,7 +73,7 @@ export default function Navbar() {
                             Karmjit SG
                         </span>
                         <span className="text-[10px] font-mono text-slate-400 tracking-wider hidden sm:block">
-                            FULL-STACK &amp; AI
+                            FULL-STACK · AI · BUILDER
                         </span>
                     </div>
                 </button>

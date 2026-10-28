@@ -3,8 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, MeshDistortMaterial } from '@react-three/drei';
 import ParticleBackground from './ParticleBackground';
-import { featuredProjects, projects } from './Projects';
-import { hackathons } from './Hackathons';
+import { hackathons } from '../data/hackathonsData';
 
 const roles = [
     'Full-Stack Developer',
@@ -222,7 +221,7 @@ export default function Hero() {
                     >
                         <div className="h-px w-12 bg-gradient-to-r from-transparent to-neon-blue" />
                         <span className="text-neon-blue text-xs sm:text-sm font-mono tracking-widest uppercase px-3 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 shadow-sm">
-                            2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer
+                            2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer · Product Builder
                         </span>
                     </motion.div>
 
@@ -252,7 +251,7 @@ export default function Hero() {
                                 </span>
                             </h1>
                             <p className="text-sm sm:text-base text-neon-blue font-mono font-medium mt-1">
-                                Full-Stack Developer &amp; AI/ML Student
+                                Full-Stack Developer | AI/ML Student | Product Builder
                             </p>
                         </div>
                     </motion.div>
@@ -274,7 +273,7 @@ export default function Hero() {
                         className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mb-8"
                     >
                         I build <span className="text-white font-semibold">full-stack web applications</span>,{' '}
-                        <span className="neon-text-cyan font-medium">AI-powered products</span>, and practical digital experiences using modern web technologies.
+                        <span className="neon-text-cyan font-medium">AI-powered products</span>, and experimental browser automation agents solving practical engineering problems.
                     </motion.p>
 
                     {/* Hero CTAs */}
@@ -330,10 +329,10 @@ export default function Hero() {
                         className="flex flex-wrap gap-6 sm:gap-10 pt-6 border-t border-white/10"
                     >
                         {[
-                            { value: featuredProjects.length, label: 'Featured Full-Stack & AI Projects' },
-                            { value: hackathons.length, label: 'Hackathons Participated' },
+                            { value: '9 Systems', label: 'Featured Systems' },
+                            { value: `${hackathons.length} Events`, label: 'Hackathons Participated' },
                             { value: 'Replit × Polaris', label: 'Vibeathon 2025' },
-                            { value: 'Kalvium', label: 'Yenepoya CSE (AI/ML)' },
+                            { value: 'Kalvium · 2029', label: 'Yenepoya B.Tech (AI/ML)' },
                         ].map((stat) => (
                             <div key={stat.label} className="group">
                                 <div className="text-xl sm:text-2xl font-bold neon-text-blue group-hover:text-neon-cyan transition-colors">
@@ -383,6 +382,12 @@ export default function Hero() {
                     <motion.div
                         whileHover={{ scale: 1.15, y: -4 }}
                         className="absolute top-1/2 right-4 glass px-3.5 py-2 rounded-xl animate-float-slow text-xs font-mono neon-text-cyan border border-neon-cyan/30 shadow-lg cursor-pointer"
+                    >
+                        &lt;agent.cdp /&gt;
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ scale: 1.15, y: -4 }}
+                        className="absolute bottom-6 right-10 glass px-3 py-1.5 rounded-xl animate-float text-[11px] font-mono text-emerald-400 border border-emerald-500/30 shadow-lg cursor-pointer"
                     >
                         git push origin main
                     </motion.div>

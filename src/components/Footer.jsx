@@ -8,6 +8,7 @@ const navItems = [
     { label: 'Skills', id: 'skills' },
     { label: 'Projects', id: 'projects' },
     { label: 'Journey', id: 'journey' },
+    { label: 'Research', id: 'research' },
     { label: 'Hackathons', id: 'hackathons' },
     { label: 'Open Source', id: 'opensource' },
     { label: 'Resume', id: 'resume' },
@@ -40,7 +41,7 @@ export default function Footer() {
                             </div>
                             <span className="gradient-text font-bold text-lg">Karmjit SG</span>
                         </div>
-                        <p className="text-xs text-slate-500 font-mono">2nd-Year B.Tech CSE (AI &amp; ML) · Full-Stack Developer</p>
+                        <p className="text-xs text-slate-500 font-mono">Full-Stack Developer | AI/ML Student | Product Builder</p>
                     </div>
 
                     {/* Nav */}
@@ -75,7 +76,7 @@ export default function Footer() {
 
                 <div className="mt-8 pt-6 border-t border-white/5 text-center">
                     <p className="text-xs text-slate-600 flex items-center justify-center gap-1.5">
-                        Built with <FaHeart className="text-neon-purple text-xs" /> by Karmjit SG · 2025 · Yenepoya University
+                        Built with <FaHeart className="text-neon-purple text-xs" /> by Karmjit SG · 2026 · Yenepoya University (Kalvium Program)
                     </p>
                 </div>
             </div>

@@ -4,11 +4,11 @@ import {
     SiPython, SiJavascript, SiTypescript, SiHtml5, SiCss, SiReact,
     SiNextdotjs, SiTailwindcss, SiNodedotjs, SiExpress,
     SiPostgresql, SiSupabase, SiFirebase, SiSqlite,
-    SiTensorflow, SiGooglegemini, SiFastapi,
+    SiTensorflow, SiGooglegemini, SiFastapi, SiOpencv,
     SiGit, SiGithub, SiVercel, SiRender, SiReplit, SiLinux, SiN8N
 } from 'react-icons/si';
 import { FaServer, FaDatabase, FaBrain, FaTools, FaCode } from 'react-icons/fa';
-import { LuNetwork, LuSparkles } from 'react-icons/lu';
+import { LuNetwork, LuSparkles, LuWorkflow } from 'react-icons/lu';
 import TiltCard from './TiltCard';
 
 const skillGroups = [
@@ -57,13 +57,14 @@ const skillGroups = [
     },
     {
         id: 'ai',
-        category: 'AI / ML & Integrations',
+        category: 'AI, ML & Computer Vision',
         color: 'pink',
         icon: FaBrain,
-        description: 'Deep learning frameworks, computer vision pipelines, and LLM integrations.',
+        description: 'Deep learning frameworks, computer vision pipelines, and LLM generative integrations.',
         skills: [
             { name: 'Python', icon: SiPython, color: '#38bdf8' },
             { name: 'TensorFlow', icon: SiTensorflow, color: '#ff6f00' },
+            { name: 'OpenCV', icon: SiOpencv, color: '#00ffea' },
             { name: 'Machine Learning', icon: FaBrain, color: '#f472b6' },
             { name: 'Google Gemini API', icon: SiGooglegemini, color: '#4796e3' },
             { name: 'Google AI Studio', icon: SiGooglegemini, color: '#00d4ff' },
@@ -71,18 +72,19 @@ const skillGroups = [
     },
     {
         id: 'devops',
-        category: 'Tools & Deployment',
+        category: 'Automation, Tools & Deployment',
         color: 'green',
         icon: FaTools,
-        description: 'Version control workflows, cloud host deployments, and workflow automation.',
+        description: 'Browser automation agents, version control workflows, and production deployments.',
         skills: [
+            { name: 'Playwright', icon: LuWorkflow, color: '#2dd4bf' },
+            { name: 'Chrome CDP', icon: FaTools, color: '#38bdf8' },
             { name: 'Git', icon: SiGit, color: '#f97316' },
             { name: 'GitHub', icon: SiGithub, color: '#e2e8f0' },
             { name: 'Vercel', icon: SiVercel, color: '#ffffff' },
             { name: 'Render', icon: SiRender, color: '#46e3b7' },
-            { name: 'Replit', icon: SiReplit, color: '#f26207' },
-            { name: 'n8n Automation', icon: SiN8N, color: '#ff6d5a' },
             { name: 'Linux Terminal', icon: SiLinux, color: '#fbbf24' },
+            { name: 'n8n Automation', icon: SiN8N, color: '#ff6d5a' },
         ],
     },
 ];
@@ -259,7 +261,7 @@ export default function Skills() {
                                         style={{ transform: 'translateZ(6px)' }}
                                         className="flex flex-wrap gap-2 pt-2 border-t border-white/5"
                                     >
-                                        {group.skills.map((skill, si) => (
+                                        {group.skills.map((skill) => (
                                             <motion.div
                                                 key={skill.name}
                                                 whileHover={{ scale: 1.06, y: -2 }}

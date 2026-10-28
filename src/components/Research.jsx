@@ -77,22 +77,22 @@ const challenges = [
     { label: 'Ethical AI in Education',color: '#b400ff' },
 ];
 
-/* ─── mini dashboard preview ───────────────────────────── */
+/* ─── research evaluation framework preview ──────────────── */
 const dashStats = [
-    { label: 'At-Risk Students', value: '14%',  color: '#ff4d6d', bar: 14 },
-    { label: 'Attendance Score', value: '73%',  color: '#00d4ff', bar: 73 },
-    { label: 'Engagement Index', value: '61%',  color: '#00ffea', bar: 61 },
-    { label: 'Model Accuracy',   value: '91%',  color: '#b400ff', bar: 91 },
+    { label: 'Research Status',  value: 'Ongoing ⏳',          color: '#ffd343', bar: 70 },
+    { label: 'Candidate Models', value: '5 Architectures',     color: '#00d4ff', bar: 100 },
+    { label: 'Feature Pipeline', value: 'LMS + Attendance',    color: '#00ffea', bar: 85 },
+    { label: 'Eval Targets',     value: 'Recall / ROC-AUC',    color: '#b400ff', bar: 90 },
 ];
 
 function DashboardPreview() {
     return (
         <div className="rounded-xl p-5 mb-7" style={{ background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(0,212,255,0.15)' }}>
             <div className="flex items-center justify-between mb-4">
-                <p className="text-xs font-mono text-slate-500 uppercase tracking-widest">AI Prediction Dashboard</p>
-                <span className="flex items-center gap-1.5 text-[10px] font-mono" style={{ color: '#00ffea' }}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse inline-block" />
-                    Live Analysis
+                <p className="text-xs font-mono text-slate-400 uppercase tracking-widest">Model Evaluation &amp; Feature Framework</p>
+                <span className="flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded border border-amber-500/40 bg-amber-500/10" style={{ color: '#ffd343' }}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
+                    Research in Progress
                 </span>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
@@ -114,16 +114,16 @@ function DashboardPreview() {
                     </div>
                 ))}
             </div>
-            {/* risk meter */}
-            <div className="rounded-lg p-3" style={{ background: 'rgba(255,77,109,0.06)', border: '1px solid rgba(255,77,109,0.2)' }}>
+            {/* risk pipeline */}
+            <div className="rounded-lg p-3" style={{ background: 'rgba(0,212,255,0.06)', border: '1px solid rgba(0,212,255,0.2)' }}>
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono text-slate-500">Student Risk Classification</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded font-mono" style={{ background: 'rgba(255,77,109,0.15)', color: '#ff4d6d', border: '1px solid rgba(255,77,109,0.4)' }}>HIGH RISK DETECTED</span>
+                    <span className="text-[10px] font-mono text-slate-400">Proposed Early Intervention Pipeline</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded font-mono" style={{ background: 'rgba(0,212,255,0.15)', color: '#00d4ff', border: '1px solid rgba(0,212,255,0.4)' }}>PROACTIVE SUPPORT</span>
                 </div>
-                <div className="flex gap-2">
-                    {['Safe · 61%', 'Moderate · 25%', 'At-Risk · 14%'].map((s, i) => (
+                <div className="flex flex-wrap gap-2">
+                    {['LMS Activity Signals', 'Attendance Thresholds', 'Continuous Mentorship Intervention'].map((s, i) => (
                         <span key={s} className="text-[9px] font-mono px-2 py-0.5 rounded"
-                            style={{ background: ['rgba(34,197,94,0.1)', 'rgba(240,219,79,0.1)', 'rgba(255,77,109,0.1)'][i], color: ['#22c55e', '#f0db4f', '#ff4d6d'][i], border: `1px solid ${['rgba(34,197,94,0.3)', 'rgba(240,219,79,0.3)', 'rgba(255,77,109,0.3)'][i]}` }}>
+                            style={{ background: ['rgba(34,197,94,0.1)', 'rgba(240,219,79,0.1)', 'rgba(0,212,255,0.1)'][i], color: ['#22c55e', '#f0db4f', '#00d4ff'][i], border: `1px solid ${['rgba(34,197,94,0.3)', 'rgba(240,219,79,0.3)', 'rgba(0,212,255,0.3)'][i]}` }}>
                             {s}
                         </span>
                     ))}
@@ -215,11 +215,11 @@ export default function Research() {
                                             <FaBrain className="text-3xl" style={{ color: '#00d4ff' }} />
                                         </div>
                                         <div>
-                                            <span className="text-xs font-mono tracking-widest uppercase text-neon-cyan opacity-80 block mb-0.5">AI Research Project</span>
+                                            <span className="text-xs font-mono tracking-widest uppercase text-amber-400 block mb-0.5">Undergraduate Research · In Progress</span>
                                             <h3 className="text-lg md:text-2xl font-bold text-white leading-tight max-w-xl">
                                                 AI-Based Early Warning System for At-Risk Students
                                             </h3>
-                                            <p className="text-sm text-slate-400 mt-1 font-mono">Higher Education · Machine Learning</p>
+                                            <p className="text-sm text-slate-400 mt-1 font-mono">Higher Education · Machine Learning Candidate Architecture Study</p>
                                         </div>
                                     </div>
 
@@ -257,14 +257,17 @@ export default function Research() {
                                 <div className="mb-7">
                                     <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">ML Models Used</p>
                                     <div className="flex flex-wrap gap-2.5">
-                                        {mlModels.map(({ name, color, icon: Ic }) => (
-                                            <motion.span key={name} whileHover={{ scale: 1.07, boxShadow: `0 0 18px ${color}60` }}
-                                                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold cursor-default"
-                                                style={{ background: `${color}14`, border: `1px solid ${color}45`, color }}>
-                                                <Ic style={{ fontSize: '0.85rem' }} />
-                                                {name}
-                                            </motion.span>
-                                        ))}
+                                        {mlModels.map(({ name, color, icon }) => {
+                                            const ModelIcon = icon;
+                                            return (
+                                                <motion.span key={name} whileHover={{ scale: 1.07, boxShadow: `0 0 18px ${color}60` }}
+                                                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold cursor-default"
+                                                    style={{ background: `${color}14`, border: `1px solid ${color}45`, color }}>
+                                                    <ModelIcon style={{ fontSize: '0.85rem' }} />
+                                                    {name}
+                                                </motion.span>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
@@ -273,12 +276,15 @@ export default function Research() {
                                     <div>
                                         <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">System Objectives</p>
                                         <ul className="space-y-2.5">
-                                            {objectives.map(({ label, icon: Ic, color }) => (
-                                                <li key={label} className="flex items-center gap-2.5 text-sm text-slate-300">
-                                                    <Ic style={{ color, fontSize: '1rem', flexShrink: 0 }} />
-                                                    {label}
-                                                </li>
-                                            ))}
+                                            {objectives.map(({ label, icon, color }) => {
+                                                const ObjIcon = icon;
+                                                return (
+                                                    <li key={label} className="flex items-center gap-2.5 text-sm text-slate-300">
+                                                        <ObjIcon style={{ color, fontSize: '1rem', flexShrink: 0 }} />
+                                                        {label}
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </div>
                                     <div>
@@ -328,12 +334,15 @@ export default function Research() {
                                         { name: 'ML Pipelines', icon: BsGraphUp,    color: '#00d4ff' },
                                         { name: 'LMS Analytics',icon: MdSchool,     color: '#00ffea' },
                                         { name: 'AI Ethics',    icon: FaShieldAlt,  color: '#b400ff' },
-                                    ].map(({ name, icon: Ic, color }) => (
-                                        <span key={name} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold"
-                                            style={{ background: `${color}14`, border: `1px solid ${color}40`, color }}>
-                                            <Ic style={{ fontSize: '0.85rem' }} />{name}
-                                        </span>
-                                    ))}
+                                    ].map(({ name, icon, color }) => {
+                                        const TechIcon = icon;
+                                        return (
+                                            <span key={name} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold"
+                                                style={{ background: `${color}14`, border: `1px solid ${color}40`, color }}>
+                                                <TechIcon style={{ fontSize: '0.85rem' }} />{name}
+                                            </span>
+                                        );
+                                    })}
                                 </div>
 
                                 <div className="h-px w-full bg-gradient-to-r from-transparent via-neon-cyan/25 to-transparent" />

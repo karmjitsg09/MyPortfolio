@@ -71,26 +71,26 @@ export default function About() {
                                 <div>
                                     <h3 className="text-2xl font-bold text-white tracking-tight">Karmjit SG</h3>
                                     <p className="text-neon-cyan text-xs sm:text-sm font-mono mt-0.5 flex items-center gap-1.5">
-                                        <LuGraduationCap className="text-sm" /> 2nd-Year B.Tech CSE (AI &amp; ML)
+                                        <LuGraduationCap className="text-sm" /> 2nd-Year B.Tech CSE (AI &amp; ML) · 2029
                                     </p>
                                     <p className="text-slate-400 text-xs mt-0.5">Yenepoya University (Kalvium Program)</p>
                                 </div>
                             </div>
 
                             <p className="text-slate-300 leading-relaxed text-sm sm:text-base mb-5">
-                                I am a <span className="neon-text-blue font-semibold">2nd-year B.Tech Computer Science and Engineering (AI &amp; ML)</span> student at Yenepoya University (Kalvium Program). I enjoy building real, production-ready web applications and practical tools rather than only experimenting with tutorials.
+                                I am a <span className="neon-text-blue font-semibold">2nd-year B.Tech Computer Science and Engineering (AI &amp; ML)</span> student at Yenepoya University (Kalvium Program), expected to graduate in 2029. My engineering approach centers around building practical software systems, real full-stack web applications, and AI integrations.
                             </p>
                             <p className="text-slate-300 leading-relaxed text-sm sm:text-base mb-7">
-                                My core focus spans <span className="neon-text-cyan font-semibold">Full-Stack Web Development</span>, <span className="text-neon-purple font-semibold">AI/ML Integrations</span>, developer tools, product development, and automation. I have practical experience building and deploying projects using modern frontend, backend, database, and cloud platforms.
+                                Positioned as a <span className="neon-text-cyan font-semibold">Full-Stack Developer, AI/ML Student, and Product Builder</span>, I bridge modern frontend architectures (React, Next.js, TypeScript) with robust backend services (Node.js, PostgreSQL, Supabase), browser automation agents (Playwright, Chrome CDP), and AI developer tooling (Gemini API, FastAPI).
                             </p>
 
                             {/* Quick facts grid */}
                             <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                 {[
-                                    { label: 'Role Focus', value: 'Full-Stack Developer' },
+                                    { label: 'Positioning', value: 'Full-Stack & Product Builder' },
                                     { label: 'Education', value: '2nd Year B.Tech (AI/ML)' },
-                                    { label: 'Institution', value: 'Yenepoya (Kalvium)' },
-                                    { label: 'Core Stack', value: 'React, Node, TS, SQL' },
+                                    { label: 'Institution', value: 'Yenepoya (Kalvium) · 2029' },
+                                    { label: 'Core Stack', value: 'React, Next, Node, TS, SQL' },
                                 ].map((fact) => (
                                     <div
                                         key={fact.label}
